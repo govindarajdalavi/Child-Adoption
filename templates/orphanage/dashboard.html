@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Orphanage Dashboard - DDCAPMS{% endblock %}
+
+{% block header_title %}Orphanage Management Center{% endblock %}
+
+{% block content %}
+<!-- Action Header -->
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm" style="background: var(--role-gradient);">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-white">
+                    <h4 class="fw-bold mb-1">{{ current_user.organization_name }}</h4>
+                    <p class="opacity-70 small mb-0">Managing care and legal documentation for children in Dharwad District.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="{{ url_for('orphanage.add_child') }}" class="btn btn-white rounded-pill px-4 fw-bold">
+                        <i class="fas fa-plus-circle me-2"></i>Register New Child
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Care Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card glass" style="background: var(--role-gradient); border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('orphanage.my_children') }}'">
+            <div class="icon-box"><i class="fas fa-children"></i></div>
+            <h2 class="stat-number" data-target="{{ total }}">{{ total }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Children in Care</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.9; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('orphanage.my_children') }}'">
+            <div class="icon-box"><i class="fas fa-clock-rotate-left"></i></div>
+            <h2 class="stat-number" data-target="{{ cwc_review }}">{{ cwc_review }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Under CWC Review</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.85; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('orphanage.my_children') }}'">
+            <div class="icon-box"><i class="fas fa-circle-check"></i></div>
+            <h2 class="stat-number" data-target="{{ available }}">{{ available }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Available for Adoption</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.8; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('orphanage.my_children') }}'">
+            <div class="icon-box"><i class="fas fa-heart"></i></div>
+            <h2 class="stat-number" data-target="{{ adopted }}">{{ adopted }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Adoptions Completed</p>
+        </div>
+    </div>
+</div>
+
+<!-- Children List -->
+<div class="card glass border-0 p-0 overflow-hidden shadow-sm" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Children Profiles</h5>
+        <div class="input-group input-group-sm" style="width: 250px;">
+            <input type="text" class="form-control rounded-start-pill border-0 bg-light" placeholder="Search name...">
+            <span class="input-group-text rounded-end-pill border-0 bg-light"><i class="fas fa-search text-muted"></i></span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Child Details</th>
+                    <th>Age/Gender</th>
+                    <th>Medical Status</th>
+                    <th>Current Status</th>
+                    <th class="pe-4 text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child in children %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="/static/uploads/{{ child.photo }}" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=50&h=50'" 
+                                 class="rounded-circle shadow-sm" style="width: 40px; height: 40px; object-fit: cover;">
+                            <div>
+                                <div class="fw-bold">{{ child.name }}</div>
+                                <small class="text-muted">ID: #{{ child.id }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ child.age }}y / {{ child.gender }}</td>
+                    <td><span class="badge bg-light text-dark rounded-pill px-3">{{ child.health_status or 'Healthy' }}</span></td>
+                    <td>
+                        {% if child.status == 'registered' %}
+                        <span class="badge bg-white text-dark border border-warning rounded-pill px-3 shadow-sm">REGISTERED (Draft)</span>
+                        {% elif child.status == 'cwc_review' %}
+                        <span class="badge bg-white text-dark border border-info rounded-pill px-3 shadow-sm">CWC INVESTIGATION</span>
+                        {% elif child.status == 'available' %}
+                        <span class="badge bg-white text-dark border border-success rounded-pill px-3 shadow-sm">AVAILABLE</span>
+                        {% else %}
+                        <span class="badge bg-white text-dark border border-primary rounded-pill px-3 shadow-sm">{{ child.status|upper }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="pe-4 text-end">
+                        {% if child.status == 'registered' %}
+                        <form action="{{ url_for('orphanage.submit_to_cwc', child_id=child.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">Submit to CWC</button>
+                        </form>
+                        {% endif %}
+                        <a href="#" class="btn btn-sm btn-light rounded-circle"><i class="fas fa-eye"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not children %}
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">No children registered in this facility yet.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+

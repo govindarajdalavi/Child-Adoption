@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Follow Ups - Admin{% endblock %}
+
+{% block header_title %}Post-Adoption Welfare Monitoring{% endblock %}
+
+{% block content %}
+<div class="card glass border-0 p-0 overflow-hidden shadow-sm" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Monitoring Records</h5>
+        <div class="input-group input-group-sm" style="width: 250px;">
+            <input type="text" id="tableSearch" class="form-control rounded-start-pill border-0 bg-light" placeholder="Search child or parent...">
+            <span class="input-group-text rounded-end-pill border-0 bg-light"><i class="fas fa-search text-muted"></i></span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" id="followupsTable">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Child & Application</th>
+                    <th>Adoptive Parent</th>
+                    <th>Visit Sequence</th>
+                    <th>Health & Education</th>
+                    <th>Welfare Status</th>
+                    <th class="pe-4 text-end">Visit Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in followups %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">{{ f.application.child.name }}</div>
+                        <small class="text-muted">Case #{{ f.application_id }}</small>
+                    </td>
+                    <td>
+                        <div class="small fw-medium">{{ f.application.parent.name }}</div>
+                    </td>
+                    <td>
+                        <div class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">
+                            Visit {{ f.visit_number }} of 3
+                        </div>
+                    </td>
+                    <td>
+                        <div class="extra-small">Happy: <span class="fw-bold">{{ f.child_happy or '-' }}</span></div>
+                        <div class="extra-small">School: <span class="fw-bold">{{ f.school_going or '-' }}</span></div>
+                    </td>
+                    <td>
+                        {% if f.overall_status %}
+                        <span class="badge {{ 'bg-success' if f.overall_status == 'good' else ('bg-warning text-dark' if f.overall_status == 'concern' else 'bg-danger') }} rounded-pill px-3">
+                            {{ f.overall_status.upper() }}
+                        </span>
+                        {% else %}
+                        <span class="text-muted small">---</span>
+                        {% endif %}
+                    </td>
+                    <td class="pe-4 text-end">
+                        <div class="small fw-bold">{{ f.visit_date or 'Pending' }}</div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not followups %}
+                <tr><td colspan="6" class="text-center py-5 text-muted small">No post-adoption follow-up reports found in database.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('tableSearch').addEventListener('keyup', function() {
+    let filter = this.value.toUpperCase();
+    let rows = document.querySelector("#followupsTable tbody").rows;
+    for (let i = 0; i < rows.length; i++) {
+        let childCol = rows[i].cells[0].textContent.toUpperCase();
+        let parentCol = rows[i].cells[1].textContent.toUpperCase();
+        if (childCol.indexOf(filter) > -1 || parentCol.indexOf(filter) > -1) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

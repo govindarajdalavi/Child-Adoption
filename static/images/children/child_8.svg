@@ -1,0 +1,71 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(243, 229, 245, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (Sitting) -->
+  <path d="M75 180 Q70 210 90 205" fill="none" stroke="#b5621e" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M125 180 Q130 210 110 205" fill="none" stroke="#b5621e" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- CLOTHES (Purple pavada) -->
+  <path d="M60 170 Q100 200 140 170 L125 185 Q100 205 75 185 Z" fill="#4a148c"/> <!-- Skirt -->
+  <path d="M70 120 Q100 130 130 120 L140 175 Q100 185 60 175 Z" fill="#6a1b9a"/> <!-- Top -->
+  <!-- Golden border -->
+  <path d="M60 175 Q100 185 140 175 L138 180 Q100 190 62 180 Z" fill="#ffb300"/>
+  <!-- NECK -->
+  <rect x="94" y="112" width="12" height="15" fill="#9c4d15"/>
+  <!-- ARMS (Holding plant) -->
+  <path d="M68 125 Q40 150 90 160" fill="none" stroke="#b5621e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M132 125 Q160 150 110 160" fill="none" stroke="#b5621e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M62 120 L48 135 L62 140 Z" fill="#6a1b9a"/>
+  <path d="M138 120 L152 135 L138 140 Z" fill="#6a1b9a"/>
+  <!-- SMALL PLANT -->
+  <path d="M100 165 L100 140" stroke="#4caf50" stroke-width="3" stroke-linecap="round"/>
+  <path d="M100 155 Q90 145 100 145" fill="#4caf50"/>
+  <path d="M100 150 Q110 140 100 140" fill="#4caf50"/>
+  <rect x="92" y="165" width="16" height="12" rx="2" fill="#795548"/>
+  <!-- HANDS -->
+  <circle cx="90" cy="160" r="5" fill="#b5621e"/>
+  <circle cx="110" cy="160" r="5" fill="#b5621e"/>
+  <!-- HEAD -->
+  <circle cx="100" cy="82" r="38" fill="#b5621e"/>
+  <!-- EARS -->
+  <circle cx="62" cy="85" r="9" fill="#b5621e"/>
+  <circle cx="138" cy="85" r="9" fill="#b5621e"/>
+  <!-- HAIR (Long braid with flowers) -->
+  <!-- Top Hair -->
+  <path d="M62 82 Q65 40 100 38 Q135 40 138 82 Q120 45 100 45 Q80 45 62 82" fill="#1a1a1a"/>
+  <path d="M100 38 Q120 50 130 65 Q115 50 100 45 Z" fill="#1a1a1a"/>
+  <path d="M100 38 Q80 50 70 65 Q85 50 100 45 Z" fill="#1a1a1a"/>
+  <!-- Braid -->
+  <path d="M130 75 Q150 90 135 110 Q145 125 130 140 Q135 150 125 160" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linecap="round"/>
+  <path d="M130 75 Q150 90 135 110 Q145 125 130 140 Q135 150 125 160" fill="none" stroke="#212121" stroke-width="8" stroke-linecap="round"/>
+  <!-- Flowers in hair -->
+  <circle cx="135" cy="90" r="4" fill="#ffeb3b"/>
+  <circle cx="140" cy="115" r="4" fill="#ffeb3b"/>
+  <circle cx="132" cy="145" r="4" fill="#ffeb3b"/>
+  <!-- EYES (Gentle) -->
+  <circle cx="85" cy="82" r="10" fill="white"/>
+  <circle cx="115" cy="82" r="10" fill="white"/>
+  <circle cx="85" cy="82" r="7" fill="#4e342e"/>
+  <circle cx="115" cy="82" r="7" fill="#4e342e"/>
+  <circle cx="85" cy="82" r="3.5" fill="#1a1a1a"/>
+  <circle cx="115" cy="82" r="3.5" fill="#1a1a1a"/>
+  <circle cx="88" cy="79" r="2" fill="white"/>
+  <circle cx="118" cy="79" r="2" fill="white"/>
+  <!-- Eyelashes -->
+  <path d="M75 80 Q78 72 82 72" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M125 80 Q122 72 118 72" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- EYEBROWS -->
+  <path d="M75 68 Q85 65 93 68" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M107 68 Q115 65 125 68" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="92" r="3" fill="#9c4d15"/>
+  <!-- MOUTH (Kind smile) -->
+  <path d="M88 103 Q100 110 112 103" stroke="#d84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- CHEEKS -->
+  <circle cx="73" cy="95" r="8" fill="rgba(255,100,50,0.3)"/>
+  <circle cx="127" cy="95" r="8" fill="rgba(255,100,50,0.3)"/>
+  <!-- BACKGROUND FLOWERS -->
+  <circle cx="50" cy="180" r="15" fill="#ff4081" opacity="0.6"/>
+  <circle cx="150" cy="190" r="12" fill="#ff4081" opacity="0.6"/>
+  <circle cx="160" cy="160" r="10" fill="#e040fb" opacity="0.6"/>
+  <circle cx="40" cy="150" r="8" fill="#e040fb" opacity="0.6"/>
+</svg>

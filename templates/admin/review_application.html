@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Application #{{ application.id }} - Admin{% endblock %}
+
+{% block header_title %}Application Review Panel{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Application Header -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="card glass border-0 p-4 shadow-sm d-flex flex-row justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1 fw-bold text-primary">Case #{{ application.id }}</h4>
+                <p class="mb-0 text-muted small"><i class="fas fa-calendar me-2"></i>Submitted: {{ application.applied_at.strftime('%d %b %Y') if application.applied_at else 'N/A' }}</p>
+            </div>
+            <div>
+                <span class="badge badge-{{ application.status }} fs-6 px-4 py-2 rounded-pill shadow-sm">
+                    {{ application.status.replace('_',' ').upper() }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Details Column -->
+    <div class="col-lg-6" data-aos="fade-right">
+        <div class="card glass border-0 p-4 h-100 shadow-sm">
+            <h5 class="fw-bold mb-4 border-bottom pb-2"><i class="fas fa-user-friends text-primary me-2"></i>PAP Details</h5>
+            
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Name</div>
+                <div class="col-sm-8">{{ application.parent.name }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Contact</div>
+                <div class="col-sm-8">{{ application.parent.phone }}<br><small>{{ application.parent.email }}</small></div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Address</div>
+                <div class="col-sm-8">{{ application.parent.address }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Occupation</div>
+                <div class="col-sm-8">{{ application.occupation }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Income</div>
+                <div class="col-sm-8 text-success fw-bold">₹{{ application.income }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4 text-muted small fw-bold">Family Size</div>
+                <div class="col-sm-8">{{ application.family_size }} members</div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-sm-4 text-muted small fw-bold">Reason</div>
+                <div class="col-sm-8 fst-italic">"{{ application.reason }}"</div>
+            </div>
+
+            <!-- Home Study Section -->
+            {% if application.parent.home_study %}
+            <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-house-chimney-window text-success me-2"></i>Home Study Report</h6>
+            {% for study in application.parent.home_study %}
+            <div class="bg-light rounded-3 p-3 mb-3 border-start border-4 {% if study.recommendation == 'Approved' %}border-success{% elif study.recommendation == 'Rejected' %}border-danger{% else %}border-warning{% endif %}">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small fw-bold text-muted">Visit: {{ study.visit_date or 'Pending' }}</span>
+                    <span class="badge badge-{{ study.status }}">{{ study.status.replace('_', ' ')|upper }}</span>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-sm-5 small fw-bold text-muted">House Condition:</div>
+                    <div class="col-sm-7 small">{{ study.house_condition or 'N/A' }}</div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-sm-5 small fw-bold text-muted">Financial Stability:</div>
+                    <div class="col-sm-7 small">{{ study.financial_stability or 'N/A' }}</div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-sm-5 small fw-bold text-muted">Family Env:</div>
+                    <div class="col-sm-7 small">{{ study.family_environment or 'N/A' }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-5 small fw-bold text-muted">Recommendation:</div>
+                    <div class="col-sm-7 small fw-bold {% if study.recommendation == 'Approved' %}text-success{% elif study.recommendation == 'Rejected' %}text-danger{% else %}text-warning{% endif %}">{{ study.recommendation or 'Pending Evaluation' }}</div>
+                </div>
+                {% if study.notes %}
+                <div class="small fst-italic text-muted border-top pt-2 mt-2">"{{ study.notes }}"</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Documents Section -->
+            <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-folder-open text-warning me-2"></i>Uploaded Documents</h6>
+            <div class="d-flex flex-wrap gap-2">
+                {% if application.id_proof %}
+                <a href="/static/uploads/{{ application.id_proof }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-id-card text-primary me-1"></i> ID Proof</a>
+                {% endif %}
+                {% if application.income_proof %}
+                <a href="/static/uploads/{{ application.income_proof }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-rupee-sign text-success me-1"></i> Income</a>
+                {% endif %}
+                {% if application.marriage_cert %}
+                <a href="/static/uploads/{{ application.marriage_cert }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-ring text-warning me-1"></i> Marriage</a>
+                {% endif %}
+                {% if application.medical_cert %}
+                <a href="/static/uploads/{{ application.medical_cert }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-notes-medical text-danger me-1"></i> Medical</a>
+                {% endif %}
+                {% if application.police_verification %}
+                <a href="/static/uploads/{{ application.police_verification }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3"><i class="fas fa-shield-alt text-info me-1"></i> Police Clearance</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Child Details & Admin Action Column -->
+    <div class="col-lg-6 d-flex flex-column gap-4" data-aos="fade-left">
+        <!-- Child Info -->
+        <div class="card glass border-0 p-4 shadow-sm border-start border-4 border-info">
+            <h5 class="fw-bold mb-3"><i class="fas fa-baby text-info me-2"></i>Child Details</h5>
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center" style="width: 60px; height: 60px;">
+                    <i class="fas fa-child fa-2x text-muted"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1">{{ application.child.name }}</h6>
+                    <p class="mb-0 small text-muted">{{ application.child.age }} years • {{ application.child.gender }} • {{ application.child.health_status }}</p>
+                    <p class="mb-0 extra-small text-muted mt-1"><i class="fas fa-building me-1"></i> {{ application.child.registered_by.organization_name if application.child.registered_by else 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Decision Form -->
+        <div class="card glass border-0 p-4 shadow-sm flex-grow-1 border-start border-4 border-primary">
+            <h5 class="fw-bold mb-4"><i class="fas fa-gavel text-primary me-2"></i>Administrative Decision</h5>
+            
+            <div class="alert alert-danger">
+              <strong>⚠️ LEGAL NOTICE:</strong>
+              Sending child for foster care WITHOUT
+              court temporary order is a criminal
+              offense under:
+              <ul class="mb-1 mt-2">
+                <li>IPC Section 361 — Kidnapping
+                  (Up to 7 years imprisonment)</li>
+                <li>JJ Act 2015 Section 80 —
+                  Illegal adoption
+                  (Up to 3 years + Rs.1 lakh fine)</li>
+                <li>POCSO Act — If child harmed</li>
+              </ul>
+              Child can go to parent ONLY after
+              court issues temporary order!
+            </div>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Case Notes</label>
+                    <textarea name="admin_notes" class="form-control border-0 bg-light rounded-3" rows="3" placeholder="Enter confidential notes here...">{{ application.admin_notes or '' }}</textarea>
+                </div>
+
+                {# ── Age Validation Summary ───────────────────── #}
+                <div class="mb-3 p-3 rounded-3 border border-2
+                    {% if application.age_validated %}border-success bg-success bg-opacity-10
+                    {% else %}border-warning bg-warning bg-opacity-10{% endif %}">
+                    <div class="small fw-bold mb-1">
+                        {% if application.age_validated %}
+                        <i class="fas fa-circle-check text-success me-1"></i>CARA Age Validation — PASSED
+                        {% else %}
+                        <i class="fas fa-triangle-exclamation text-warning me-1"></i>Age not yet validated
+                        {% endif %}
+                    </div>
+                    {% if application.parent_age %}
+                    <div class="small text-muted">
+                        Parent: {{ application.parent_age }} yrs |
+                        Child: {{ application.child.age }} yrs |
+                        Gap: {{ application.age_gap }} yrs
+                        {% if application.spouse_age %} | Spouse: {{ application.spouse_age }} yrs{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {# ── Consent Worker Selector (only when child >= 5) ── #}
+                {% if application.child.age >= 5 and application.status == 'pending' %}
+                <div class="mb-3 p-3 rounded-3 border border-warning bg-warning bg-opacity-10">
+                    <label class="form-label small fw-bold text-warning">
+                        <i class="fas fa-balance-scale me-1"></i>
+                        JJ Act §58(3): Child is {{ application.child.age }} years old —
+                        Consent Assessment Required
+                    </label>
+                    <select name="consent_worker_id" class="form-select border-0 bg-light rounded-3">
+                        <option value="">-- Select Social Worker for Consent Assessment --</option>
+                        {% for w in workers %}
+                        <option value="{{ w.id }}">{{ w.name }} ({{ w.designation or 'Social Worker' }})</option>
+                        {% endfor %}
+                    </select>
+                    <div class="small text-muted mt-1">
+                        This worker will visit the child at the orphanage with the prospective parents.
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Determine Action</label>
+                    <select name="action" class="form-select border-0 bg-light rounded-3 py-2" required>
+                        <option value="">-- Select Action --</option>
+                        <option value="approve">✅ Approve Application
+                            {% if application.child.age >= 5 %}(Triggers Consent Assessment){% else %}(Step 1 — Verify Documents){% endif %}
+                        </option>
+                        <option value="send_to_court">🏛️ Send to Court for Temporary Foster Care Order (Step 2)</option>
+                        <option value="reject">❌ Reject Application</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill shadow-sm fw-bold"
+                        onclick="return confirm('Are you sure you want to submit this decision?')">
+                    <i class="fas fa-save me-2"></i> Submit Decision
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

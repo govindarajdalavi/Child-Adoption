@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}District Complaints - Collector{% endblock %}
+
+{% block header_title %}Grievance Management{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Header Section -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h4 class="mb-0 fw-bold">All Registered Complaints</h4>
+                <p class="text-muted small mb-0">District grievance registry and oversight</p>
+            </div>
+            <span class="badge bg-danger text-white px-4 py-2 rounded-pill shadow-sm fs-6"><i class="fas fa-exclamation-triangle me-2"></i>District Level</span>
+        </div>
+    </div>
+
+    <!-- Complaints List -->
+    <div class="col-12">
+        <div class="row g-4">
+            {% for c in complaints %}
+            <div class="col-12" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                <div class="card glass border-0 p-4 shadow-sm {% if c.is_urgent %}border-start border-4 border-danger{% elif c.status == 'open' %}border-start border-4 border-warning{% else %}border-start border-4 border-success{% endif %}">
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            <div class="d-flex align-items-center mb-3">
+                                <h5 class="mb-0 fw-bold me-3">Complaint #{{ c.id }}</h5>
+                                
+                                {% if c.is_urgent %}
+                                <span class="badge bg-danger rounded-pill px-3 py-2 shadow-sm me-2 animate-pulse"><i class="fas fa-siren-on me-1"></i> URGENT PRIORITY</span>
+                                {% endif %}
+                                
+                                <span class="badge {% if c.status == 'open' %}bg-warning text-dark{% elif c.status == 'investigating' %}bg-info{% else %}bg-success{% endif %} rounded-pill px-3 py-2 shadow-sm">
+                                    {{ c.status.upper() }}
+                                </span>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-sm-4">
+                                    <p class="extra-small text-muted text-uppercase mb-1">Filed By</p>
+                                    <h6 class="fw-bold mb-0">{{ c.filed_by }} <span class="text-muted fw-normal small">({{ c.filed_by_role }})</span></h6>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="extra-small text-muted text-uppercase mb-1">Subject Child</p>
+                                    <h6 class="fw-bold mb-0">{{ c.application.child.name }}</h6>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="extra-small text-muted text-uppercase mb-1">Date Filed</p>
+                                    <h6 class="fw-bold mb-0">{{ c.created_at.strftime('%d %b, %Y') }}</h6>
+                                </div>
+                            </div>
+
+                            <div class="bg-light bg-opacity-50 p-3 rounded-4 border-0 mb-0">
+                                <p class="extra-small text-muted text-uppercase fw-bold mb-2">Complaint Description</p>
+                                <p class="mb-0 text-dark">{{ c.description }}</p>
+                            </div>
+
+                            {% if c.admin_action %}
+                            <div class="alert alert-info border-info bg-info bg-opacity-10 rounded-4 mt-3 mb-0 shadow-sm p-3">
+                                <p class="extra-small text-info text-uppercase fw-bold mb-1"><i class="fas fa-clipboard-check me-1"></i> Official Action Taken</p>
+                                <p class="mb-0 text-dark">{{ c.admin_action }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-3 text-md-end mt-3 mt-md-0 d-flex flex-column gap-2 justify-content-center">
+                            {% if c.status != 'resolved' %}
+                            <button class="btn btn-outline-primary rounded-pill w-100 py-2 fw-bold hover-lift">
+                                Review Case File
+                            </button>
+                            <button class="btn btn-primary rounded-pill w-100 py-2 fw-bold hover-lift">
+                                Record Action
+                            </button>
+                            {% else %}
+                            <div class="text-center p-3">
+                                <div class="avatar-md bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-check-double fa-lg"></i>
+                                </div>
+                                <span class="fw-bold text-success small">Case Closed</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not complaints %}
+            <div class="col-12" data-aos="zoom-in">
+                <div class="card glass border-0 p-5 text-center shadow-sm">
+                    <div class="avatar-xl bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+                        <i class="fas fa-shield-check fa-3x"></i>
+                    </div>
+                    <h4 class="fw-bold text-success mb-2">All Clear</h4>
+                    <p class="text-muted">There are currently no active complaints or grievances in the district.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+.animate-pulse {
+    animation: pulse-red 2s infinite;
+}
+</style>
+{% endblock %}

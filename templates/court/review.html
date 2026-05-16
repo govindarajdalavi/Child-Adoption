@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Judicial Review - Court{% endblock %}
+
+{% block header_title %}Adoption Decree Review{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <!-- Header Section -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h4 class="mb-0 fw-bold">Issue Court Order</h4>
+                <p class="text-muted small mb-0">Application Ref: #{{ application.id }}</p>
+            </div>
+            <span class="badge bg-primary text-white px-4 py-2 rounded-pill shadow-sm fs-6"><i class="fas fa-balance-scale me-2"></i>Judicial Bench</span>
+        </div>
+    </div>
+
+    <!-- Case Details Column -->
+    <div class="col-lg-5" data-aos="fade-right">
+        
+        <!-- Child Details -->
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-info">
+            <h6 class="fw-bold border-bottom pb-3 mb-3"><i class="fas fa-child text-info me-2"></i>Subject Details (Child)</h6>
+            
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Full Name</span>
+                    <span class="fw-bold">{{ application.child.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Age / Gender</span>
+                    <span class="fw-bold">{{ application.child.age }} yrs / {{ application.child.gender }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Health Status</span>
+                    <span class="fw-bold"><i class="fas fa-notes-medical text-danger me-1"></i> {{ application.child.health_status }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Custodial Agency</span>
+                    <span class="fw-bold text-end">{{ application.child.registered_by.organization_name if application.child.registered_by else 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Details -->
+        <div class="card glass border-0 p-4 shadow-sm border-start border-4 border-success">
+            <h6 class="fw-bold border-bottom pb-3 mb-3"><i class="fas fa-user-friends text-success me-2"></i>Petitioner Details (Parent)</h6>
+            
+            <div class="d-flex flex-column gap-2 mb-3">
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Full Name</span>
+                    <span class="fw-bold">{{ application.applicant.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Contact</span>
+                    <span class="fw-bold">{{ application.applicant.phone }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Occupation</span>
+                    <span class="fw-bold">{{ application.occupation }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Income / Family Size</span>
+                    <span class="fw-bold">{{ application.income }} / {{ application.family_size }}</span>
+                </div>
+            </div>
+
+            <div>
+                <span class="extra-small text-muted text-uppercase d-block mb-1">Residential Address</span>
+                <p class="small mb-2 bg-light p-2 rounded-3 border-0">{{ application.applicant.address }}</p>
+            </div>
+            
+            <div>
+                <span class="extra-small text-muted text-uppercase d-block mb-1">Stated Reason</span>
+                <p class="small mb-0 bg-light p-2 rounded-3 border-0 fst-italic">"{{ application.reason }}"</p>
+            </div>
+
+            {% if application.admin_notes %}
+            <div class="alert alert-secondary border-0 bg-secondary bg-opacity-10 rounded-3 mt-4 mb-0 small">
+                <i class="fas fa-clipboard-check me-2 text-secondary"></i>
+                <strong>District Admin Notes:</strong> {{ application.admin_notes }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Form Column -->
+    <div class="col-lg-7" data-aos="fade-left">
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-primary h-100">
+            <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-gavel me-2"></i>Issue Final Court Decree</h5>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Court Order Number <span class="text-danger">*</span></label>
+                    <input type="text" name="order_number" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. DCF/HBL/2026/001" required>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Order Date <span class="text-danger">*</span></label>
+                    <input type="date" name="order_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Presiding Judge Name <span class="text-danger">*</span></label>
+                    <input type="text" name="judge_name" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Hon. Justice Prakash M. Kulkarni" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Court Observations & Decrees</label>
+                    <textarea name="notes" class="form-control border-0 bg-light rounded-3 py-2" rows="5" placeholder="Enter formal court observations, conditions, and final remarks..."></textarea>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 d-block">Final Legal Decision <span class="text-danger">*</span></label>
+                    <select name="decision" class="form-select border-0 bg-light rounded-3 py-3 fw-bold" required>
+                        <option value="approved" class="text-success">✅ Approve Adoption (Grant Legal Custody)</option>
+                        <option value="rejected" class="text-danger">❌ Reject Adoption</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-lg fw-bold hover-lift">
+                        <i class="fas fa-file-signature me-2"></i> Sign and Issue Court Order
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

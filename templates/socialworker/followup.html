@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Post-Adoption Follow-up - Social Worker{% endblock %}
+
+{% block header_title %}Field Visit Report{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8" data-aos="fade-up">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0 fw-bold">Visit {{ visit_number }} of 3</h5>
+            <span class="badge bg-info px-3 py-2 rounded-pill shadow-sm">CARA Regulation 13</span>
+        </div>
+
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-primary">
+            <div class="row g-3">
+                <div class="col-sm-4 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Child</p>
+                    <h6 class="fw-bold mb-0 text-primary">{{ application.child.name }}</h6>
+                </div>
+                <div class="col-sm-4 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Adoptive Parent</p>
+                    <h6 class="fw-bold mb-0">{{ application.parent.name }}</h6>
+                </div>
+                <div class="col-sm-4">
+                    <p class="extra-small text-muted text-uppercase mb-1">Milestone</p>
+                    <h6 class="fw-bold mb-0">
+                        {% if visit_number == 1 %} 1 Month Visit
+                        {% elif visit_number == 2 %} 6 Month Visit
+                        {% else %} 1 Year Final Visit
+                        {% endif %}
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 shadow-sm">
+            <i class="fas fa-exclamation-triangle me-2 text-warning-emphasis"></i>
+            If status is marked as <strong>Critical</strong>, the case will be automatically escalated to court and the child may be returned to the orphanage.
+        </div>
+
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Visit Date <span class="text-danger">*</span></label>
+                    <input type="date" name="visit_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Child's Health Condition <span class="text-danger">*</span></label>
+                    <input type="text" name="child_health" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Excellent, Good, Poor" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Is Child Happy?</label>
+                    <select name="child_happy" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Somewhat">Somewhat</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Going to School?</label>
+                    <select name="school_going" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Not School Age">Not School Age</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Family Bonding</label>
+                    <select name="family_bonding" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Excellent">Excellent</option>
+                        <option value="Good">Good</option>
+                        <option value="Average">Average</option>
+                        <option value="Poor">Poor</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Complaints or Issues Found?</label>
+                    <textarea name="complaints_found" class="form-control border-0 bg-light rounded-3 py-2" rows="3" placeholder="Describe any physical/emotional issues or complaints from the child..."></textarea>
+                </div>
+                
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Action Needed (if any)</label>
+                    <textarea name="action_needed" class="form-control border-0 bg-light rounded-3 py-2" rows="2" placeholder="What action should the administration take..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 mb-3 d-block">Assessment Status</label>
+                    <select name="overall_status" class="form-select border-0 bg-light rounded-3 py-3 fw-bold">
+                        <option value="good" class="text-success">✅ Good — Child is happy and safe</option>
+                        <option value="concern" class="text-warning">⚠️ Concern — Minor issues found</option>
+                        <option value="critical" class="text-danger">🚨 Critical — Child at immediate risk!</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-lg fw-bold hover-lift">
+                        <i class="fas fa-save me-2"></i> Submit Follow-up Report
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

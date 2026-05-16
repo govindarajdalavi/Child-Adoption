@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Application - DDCAPMS{% endblock %}
+
+{% block header_title %}Track Your Application Status{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Stepper Styles */
+    .stepper-wrapper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .stepper-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 25px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #e2e8f0;
+        z-index: 0;
+    }
+
+    .stepper-progress {
+        position: absolute;
+        top: 25px;
+        left: 0;
+        height: 4px;
+        background: var(--primary-color);
+        z-index: 1;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stepper-item {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 14%;
+    }
+
+    .stepper-item .step-counter {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #fff;
+        border: 4px solid #e2e8f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .stepper-item.completed .step-counter {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .stepper-item.active .step-counter {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        transform: scale(1.1);
+    }
+
+    .stepper-item .step-name {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #64748b;
+        text-align: center;
+    }
+
+    .stepper-item.completed .step-name,
+    .stepper-item.active .step-name {
+        color: var(--primary-color);
+    }
+
+    /* Court Info Card */
+    .court-card {
+        background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .court-header {
+        background: var(--status-hearing-scheduled);
+        color: white;
+        padding: 1rem 1.5rem;
+    }
+
+    /* Timeline animation */
+    [data-bs-theme="dark"] .stepper-wrapper::before {
+        background: #334155;
+    }
+    [data-bs-theme="dark"] .stepper-item .step-counter {
+        background: #1e293b;
+        border-color: #334155;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Filter Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card glass border-0 p-3 shadow-sm" data-aos="fade-down">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="text-muted small fw-bold me-2"><i class="fas fa-filter me-1"></i> FILTER STATUS:</span>
+                <a href="{{ url_for('parent.track', status='all') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'all' %}btn-primary shadow{% else %}btn-light{% endif %}">All</a>
+                <a href="{{ url_for('parent.track', status='pending') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'pending' %}btn-warning shadow{% else %}btn-light{% endif %}">Pending</a>
+                <a href="{{ url_for('parent.track', status='admin_approved') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'admin_approved' %}btn-info shadow{% else %}btn-light text-info{% endif %}">Admin Approved</a>
+                <a href="{{ url_for('parent.track', status='foster_care') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'foster_care' %}btn-secondary shadow{% else %}btn-light text-secondary{% endif %}">Foster Care</a>
+                <a href="{{ url_for('parent.track', status='hearing_scheduled') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'hearing_scheduled' %}btn-purple shadow text-white{% else %}btn-light{% endif %}" style="{% if status_filter == 'hearing_scheduled' %}background: var(--status-hearing-scheduled);{% endif %}">Hearing</a>
+                <a href="{{ url_for('parent.track', status='court_approved') }}" class="btn btn-sm rounded-pill px-3 transition-all {% if status_filter == 'court_approved' %}btn-success shadow{% else %}btn-light text-success{% endif %}">Approved</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Applications Loop -->
+{% for app in applications %}
+<div class="card glass border-0 p-4 mb-5 shadow-lg" data-aos="fade-up">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center gap-3">
+                <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; font-size: 2rem;">
+                    <i class="fas fa-child"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-1">{{ app.child.name }}</h3>
+                    <div class="d-flex gap-3 text-muted small">
+                        <span><i class="fas fa-fingerprint me-1 text-primary"></i> App ID: #{{ app.id }}</span>
+                        <span><i class="fas fa-calendar-check me-1 text-primary"></i> Applied: {{ app.applied_at.strftime('%d %b, %Y') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge badge-{{ app.status }} fs-6 px-4 py-2 shadow-sm">{{ app.status.replace('_',' ').upper() }}</span>
+        </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper-wrapper">
+        {% set steps = ['pending', 'admin_approved', 'sent_to_court', 'foster_care', 'hearing_scheduled', 'court_approved', 'completed'] %}
+        {% set current_step_index = 0 %}
+        {% if app.status == 'pending' %}{% set current_step_index = 0 %}
+        {% elif app.status == 'admin_approved' %}{% set current_step_index = 1 %}
+        {% elif app.status == 'sent_to_court' %}{% set current_step_index = 2 %}
+        {% elif app.status in ['court_temp_order_issued', 'foster_care', 'foster_care_complete'] %}{% set current_step_index = 3 %}
+        {% elif app.status == 'hearing_scheduled' %}{% set current_step_index = 4 %}
+        {% elif app.status in ['hearing_done', 'court_approved'] %}{% set current_step_index = 5 %}
+        {% elif app.status == 'completed' %}{% set current_step_index = 6 %}
+        {% endif %}
+
+        <div class="stepper-progress" style="width: {{ (current_step_index / (steps|length - 1)) * 100 }}%;"></div>
+        
+        <div class="stepper-item {% if current_step_index >= 0 %}completed{% endif %} {% if current_step_index == 0 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-file-alt"></i></div>
+            <div class="step-name">Applied</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 1 %}completed{% endif %} {% if current_step_index == 1 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-user-shield"></i></div>
+            <div class="step-name">Admin Review</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 2 %}completed{% endif %} {% if current_step_index == 2 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-home-heart"></i></div>
+            <div class="step-name">Foster Care</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 3 %}completed{% endif %} {% if current_step_index == 3 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-gavel"></i></div>
+            <div class="step-name">Court Filed</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 4 %}completed{% endif %} {% if current_step_index == 4 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-calendar-day"></i></div>
+            <div class="step-name">Hearing</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 5 %}completed{% endif %} {% if current_step_index == 5 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-check-double"></i></div>
+            <div class="step-name">Approved</div>
+        </div>
+        <div class="stepper-item {% if current_step_index >= 6 %}completed{% endif %} {% if current_step_index == 6 %}active{% endif %}">
+            <div class="step-counter"><i class="fas fa-star"></i></div>
+            <div class="step-name">Final</div>
+        </div>
+    </div>
+
+    <!-- Status Details -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="p-4 rounded-4 bg-light bg-opacity-50 border border-white">
+                {% if app.status == 'pending' %}
+                <h5 class="fw-bold mb-3"><i class="fas fa-clock text-warning me-2"></i>Under Review</h5>
+                <p class="text-muted">Your application is being processed by the Dharwad WCD Department. We are currently verifying your Home Study report and uploaded documents.</p>
+                <div class="d-flex gap-2 mt-4">
+                    <span class="badge bg-white text-dark border rounded-pill px-3 py-2">Estimated time: 3-5 working days</span>
+                </div>
+
+                {% elif app.status in ['admin_approved', 'sent_to_court'] %}
+                <h5 class="fw-bold mb-3 text-info"><i class="fas fa-landmark me-2"></i>Case Sent to Court</h5>
+                <p class="text-muted">District Admin has verified your application and sent it to the District Family Court. Please wait for the Court to issue a Temporary Foster Care Order.</p>
+                {% if app.admin_notes %}
+                <div class="mt-3 p-3 bg-white rounded-3 border-start border-4 border-info">
+                    <small class="fw-bold text-info d-block mb-1">ADMIN REMARKS:</small>
+                    <span class="small">{{ app.admin_notes }}</span>
+                </div>
+                {% endif %}
+
+                {% elif app.status in ['court_temp_order_issued', 'foster_care', 'foster_care_complete'] %}
+                <h5 class="fw-bold mb-3 text-secondary"><i class="fas fa-house-user me-2"></i>Pre-Adoption Foster Care</h5>
+                <p class="text-muted">The child is currently in your care for the mandatory bonding period under court order. A social worker will conduct weekly visits during this time.</p>
+                
+                {% if app.temp_order_issued %}
+                <div class="card bg-white border border-warning shadow-sm p-4 mt-4">
+                    <h6 class="fw-bold text-warning mb-3"><i class="fas fa-landmark me-2"></i>🏛️ COURT TEMPORARY ORDER</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Order Number</small>
+                            <span class="fw-bold text-primary">{{ app.temp_order_number }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Date</small>
+                            <span class="fw-bold">{{ app.temp_order_date }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Presiding Judge</small>
+                            <span class="fw-bold">{{ app.temp_order_judge }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Permission</small>
+                            <span class="fw-bold text-success">Foster Care (Pre-Adoption)</span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('court.download_temp_order', app_id=app.id) }}" class="btn btn-outline-primary btn-sm rounded-pill mt-3 shadow-sm border-2">
+                        <i class="fas fa-file-pdf me-2 text-danger"></i>Download Certified Order PDF
+                    </a>
+                </div>
+                {% endif %}
+
+                {% elif app.status == 'hearing_scheduled' %}
+                <div class="court-card shadow-sm mb-4">
+                    <div class="court-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold"><i class="fas fa-gavel me-2"></i>OFFICIAL HEARING DETAILS</h6>
+                        <span class="badge bg-white text-purple">MANDATORY</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <small class="text-muted d-block text-uppercase extra-small fw-bold">Hearing Date & Time</small>
+                                    <div class="fs-5 fw-bold text-danger">{{ app.final_hearing_date }} at {{ app.final_hearing_time }}</div>
+                                </div>
+                                <div class="mb-0">
+                                    <small class="text-muted d-block text-uppercase extra-small fw-bold">Presiding Judge</small>
+                                    <div class="fw-bold">{{ app.final_judge_name }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <small class="text-muted d-block text-uppercase extra-small fw-bold">Venue / Court Complex</small>
+                                    <div class="fw-bold text-primary">{{ app.final_hearing_venue }}</div>
+                                </div>
+                                <div class="mb-0">
+                                    <small class="text-muted d-block text-uppercase extra-small fw-bold">Room / Bench</small>
+                                    <div class="fw-bold">{{ app.final_hearing_room }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger border-0 shadow-sm rounded-4 p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-triangle-exclamation me-2"></i>Important Instructions for Hearing</h6>
+                    <ul class="small mb-0 row">
+                        <li class="col-md-6 mb-2">Both spouses must be present physically.</li>
+                        <li class="col-md-6 mb-2">Bring original Aadhaar and Marriage Certificate.</li>
+                        <li class="col-md-6 mb-2">Original Medical and Income certificates required.</li>
+                        <li class="col-md-6 mb-2">Police verification original copy.</li>
+                    </ul>
+                </div>
+
+                {% elif app.status == 'court_approved' or app.status == 'completed' %}
+                <div class="text-center py-4">
+                    <div class="avatar-xl bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+                        <i class="fas fa-certificate fa-3x"></i>
+                    </div>
+                    <h4 class="fw-bold text-success">Adoption Successfully Approved!</h4>
+                    <p class="text-muted">The court has issued the final adoption order. You are now the legal guardians of the child.</p>
+                    
+                    <div class="card bg-white border-0 border-success shadow-sm p-4 mt-4 text-start d-inline-block mx-auto" style="min-width: 300px; border: 2px solid #198754 !important;">
+                        <h6 class="fw-bold text-success mb-3"><i class="fas fa-gavel me-2"></i>⚖️ FINAL ADOPTION ORDER</h6>
+                        <div class="mb-3">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Court Order Number</small>
+                            <span class="fs-5 fw-bold text-primary">{{ app.final_order_number }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Order Date</small>
+                            <span class="fw-bold">{{ app.final_order_date }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Judge</small>
+                            <span class="fw-bold">{{ app.final_judge_name }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block text-uppercase extra-small fw-bold">Status</small>
+                            <span class="badge bg-success px-3 py-2">ADOPTION APPROVED</span>
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ url_for('court.download_final_order', app_id=app.id) }}" class="btn btn-success rounded-pill px-4 w-100 mb-2 shadow">
+                                <i class="fas fa-file-pdf me-2"></i>Download Final Adoption Decree PDF
+                            </a>
+                            <button class="btn btn-outline-secondary rounded-pill px-4 w-100" disabled>
+                                <i class="fas fa-building me-2"></i>[Collect from Court Office]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card glass border-0 bg-primary bg-opacity-10 h-100 p-4">
+                <h6 class="fw-bold mb-4">Document Checklist</h6>
+                <div class="list-group list-group-flush bg-transparent">
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="small"><i class="fas fa-file-pdf me-2 text-primary"></i> Application Form</span>
+                        <i class="fas fa-circle-check text-success"></i>
+                    </div>
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="small"><i class="fas fa-file-pdf me-2 text-primary"></i> Identity Proofs</span>
+                        <i class="fas fa-circle-check text-success"></i>
+                    </div>
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="small"><i class="fas fa-file-pdf me-2 text-primary"></i> Home Study Report</span>
+                        <i class="fas fa-circle-check text-success"></i>
+                    </div>
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="small"><i class="fas fa-file-pdf me-2 text-primary"></i> Child Study Report</span>
+                        <i class="fas {% if current_step_index >= 1 %}fa-circle-check text-success{% else %}fa-circle text-muted opacity-20{% endif %}"></i>
+                    </div>
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="small"><i class="fas fa-file-pdf me-2 text-primary"></i> Court Petition</span>
+                        <i class="fas {% if current_step_index >= 3 %}fa-circle-check text-success{% else %}fa-circle text-muted opacity-20{% endif %}"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-auto pt-4">
+                    <div class="p-3 bg-white rounded-3 text-center">
+                        <small class="text-muted d-block mb-2">Need assistance?</small>
+                        <button class="btn btn-sm btn-primary w-100 rounded-pill"><i class="fas fa-headset me-2"></i>Contact Support</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% if not applications %}
+<div class="text-center py-5" data-aos="zoom-in">
+    <img src="https://illustrations.popsy.co/blue/searching.svg" alt="No data" style="width: 200px;" class="mb-4">
+    <h4 class="fw-bold">No applications to track</h4>
+    <p class="text-muted">You haven't submitted any adoption applications yet.</p>
+    <a href="{{ url_for('parent.view_children') }}" class="btn btn-primary rounded-pill px-4 mt-3">Start Adoption Journey</a>
+</div>
+{% endif %}
+{% endblock %}

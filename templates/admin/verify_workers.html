@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}User Verification - Admin{% endblock %}
+
+{% block header_title %}Institutional Verification & Credentialing{% endblock %}
+
+{% block content %}
+<!-- Verification Guidelines -->
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm border-start border-warning border-4">
+            <h6 class="fw-bold text-warning mb-2"><i class="fas fa-shield-halved me-2"></i>Mandatory Verification Protocol</h6>
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="text-muted small mb-0">As per CARA guidelines, all field workers and agencies must be vetted against their registration certificates and local license databases before system activation.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2">
+                        {{ pending_workers|length + pending_orphanages|length }} Pending Approval
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Sections -->
+<div class="row g-4">
+    <!-- Pending Social Workers -->
+    <div class="col-lg-6" data-aos="fade-right">
+        <div class="card glass border-0 p-4 h-100 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="fas fa-user-tie text-primary me-2"></i>Social Worker Requests</h6>
+            {% for worker in pending_workers %}
+            <div class="p-3 border rounded-4 bg-light bg-opacity-50 mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <div class="fw-bold">{{ worker.name }}</div>
+                        <small class="text-muted">{{ worker.organization_name or 'Independent' }}</small>
+                    </div>
+                    <span class="extra-small text-muted">{{ worker.created_at.strftime('%d-%m-%Y') }}</span>
+                </div>
+                <div class="extra-small text-muted mb-3">
+                    <i class="fas fa-id-card me-1"></i> License: {{ worker.license_number or 'N/A' }} | <i class="fas fa-phone me-1"></i> {{ worker.phone }}
+                </div>
+                <div class="d-flex gap-2">
+                    {% if worker.license_document %}
+                    <a href="/static/uploads/{{ worker.license_document }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill flex-grow-1">View License</a>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('admin.approve_user', uid=worker.id) }}" class="flex-grow-1">
+                        <button type="submit" class="btn btn-sm btn-success rounded-pill w-100">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.reject_user', uid=worker.id) }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            {% if not pending_workers %}<div class="text-center py-5 text-muted small">No pending social worker requests.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- Pending Orphanages -->
+    <div class="col-lg-6" data-aos="fade-left">
+        <div class="card glass border-0 p-4 h-100 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="fas fa-building text-warning me-2"></i>Orphanage Registrations</h6>
+            {% for orphanage in pending_orphanages %}
+            <div class="p-3 border rounded-4 bg-light bg-opacity-50 mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <div class="fw-bold">{{ orphanage.organization_name or orphanage.name }}</div>
+                        <small class="text-muted">Contact: {{ orphanage.name }}</small>
+                    </div>
+                    <span class="extra-small text-muted">{{ orphanage.created_at.strftime('%d-%m-%Y') }}</span>
+                </div>
+                <div class="extra-small text-muted mb-3">
+                    <i class="fas fa-location-dot me-1"></i> {{ orphanage.address or 'Dharwad' }} | <i class="fas fa-phone me-1"></i> {{ orphanage.phone }}
+                </div>
+                <div class="d-flex gap-2">
+                    {% if orphanage.license_document %}
+                    <a href="/static/uploads/{{ orphanage.license_document }}" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill flex-grow-1">View Certificate</a>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('admin.approve_user', uid=orphanage.id) }}" class="flex-grow-1">
+                        <button type="submit" class="btn btn-sm btn-success rounded-pill w-100">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.reject_user', uid=orphanage.id) }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            {% if not pending_orphanages %}<div class="text-center py-5 text-muted small">No pending orphanage registrations.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- Verified Database -->
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm mt-4">
+            <ul class="nav nav-pills mb-4 gap-2" id="verifiedTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-pill px-4" id="workers-tab" data-bs-toggle="pill" data-bs-target="#workers" type="button" role="tab">Verified Social Workers</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill px-4" id="agencies-tab" data-bs-toggle="pill" data-bs-target="#agencies" type="button" role="tab">Verified Agencies</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="verifiedTabContent">
+                <div class="tab-pane fade show active" id="workers" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="bg-light">
+                                <tr class="extra-small text-uppercase text-muted">
+                                    <th>Name</th>
+                                    <th>Organization</th>
+                                    <th>License</th>
+                                    <th>Phone</th>
+                                    <th class="text-end">Credential</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for worker in verified_workers %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">{{ worker.name }}</div>
+                                        <div class="extra-small text-muted">{{ worker.designation or 'Field Officer' }}</div>
+                                    </td>
+                                    <td>{{ worker.organization_name or 'N/A' }}</td>
+                                    <td><span class="badge bg-light text-dark fw-normal">{{ worker.license_number or 'N/A' }}</span></td>
+                                    <td>{{ worker.phone }}</td>
+                                    <td class="text-end">
+                                        {% if worker.license_document %}
+                                        <a href="/static/uploads/{{ worker.license_document }}" target="_blank" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-file-pdf"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="agencies" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="bg-light">
+                                <tr class="extra-small text-uppercase text-muted">
+                                    <th>Agency Name</th>
+                                    <th>Contact Person</th>
+                                    <th>License</th>
+                                    <th>Phone</th>
+                                    <th class="text-end">Credential</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for org in verified_orphanages %}
+                                <tr>
+                                    <td><div class="fw-bold text-primary">{{ org.organization_name or org.name }}</div></td>
+                                    <td>{{ org.name }}</td>
+                                    <td><span class="badge bg-light text-dark fw-normal">{{ org.license_number or 'N/A' }}</span></td>
+                                    <td>{{ org.phone }}</td>
+                                    <td class="text-end">
+                                        {% if org.license_document %}
+                                        <a href="/static/uploads/{{ org.license_document }}" target="_blank" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-file-pdf"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Adoption Applications - Admin{% endblock %}
+
+{% block header_title %}District Adoption Application Registry{% endblock %}
+
+{% block content %}
+<div class="card glass border-0 p-0 overflow-hidden shadow-sm" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Active Case Files</h5>
+        <div class="input-group input-group-sm" style="width: 250px;">
+            <input type="text" id="tableSearch" class="form-control rounded-start-pill border-0 bg-light" placeholder="Search applications...">
+            <span class="input-group-text rounded-end-pill border-0 bg-light"><i class="fas fa-search text-muted"></i></span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" id="applicationsTable">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Case #</th>
+                    <th>Parent / Applicant</th>
+                    <th>Child / Ward</th>
+                    <th>Employment</th>
+                    <th>Submission Date</th>
+                    <th>Process Status</th>
+                    <th class="pe-4 text-end">Management</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td class="ps-4 text-muted fw-bold">#{{ app.id }}</td>
+                    <td>
+                        <div class="fw-bold">{{ app.parent.name }}</div>
+                        <div class="extra-small text-muted">{{ app.parent.email }}</div>
+                    </td>
+                    <td>
+                        <div class="fw-medium text-primary">{{ app.child.name }}</div>
+                        <div class="extra-small text-muted">{{ app.child.age }}y / {{ app.child.gender }}</div>
+                    </td>
+                    <td>
+                        <div class="small fw-medium">{{ app.occupation }}</div>
+                        <div class="extra-small text-muted">Income: ₹{{ app.income }}</div>
+                    </td>
+                    <td>
+                        <div class="small"><i class="fas fa-calendar-alt me-1 text-muted"></i> {{ app.applied_at.strftime('%d-%m-%Y') }}</div>
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ app.status }}">
+                            {{ app.status.replace('_',' ').upper() }}
+                        </span>
+                    </td>
+                    <td class="pe-4 text-end">
+                        <a href="{{ url_for('admin.review_application', app_id=app.id) }}" class="btn btn-sm btn-primary rounded-pill px-4 shadow-sm">
+                            <i class="fas fa-file-signature me-1"></i> Review
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('tableSearch').addEventListener('keyup', function() {
+    let filter = this.value.toUpperCase();
+    let rows = document.querySelector("#applicationsTable tbody").rows;
+    for (let i = 0; i < rows.length; i++) {
+        let parentCol = rows[i].cells[1].textContent.toUpperCase();
+        let childCol = rows[i].cells[2].textContent.toUpperCase();
+        let idCol = rows[i].cells[0].textContent.toUpperCase();
+        if (parentCol.indexOf(filter) > -1 || childCol.indexOf(filter) > -1 || idCol.indexOf(filter) > -1) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

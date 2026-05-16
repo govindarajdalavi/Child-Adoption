@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Study Report - Social Worker{% endblock %}
+
+{% block header_title %}Pre-Adoption Assessment{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Header Section -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h4 class="mb-0 fw-bold">Home Study Report</h4>
+                <p class="text-muted small mb-0">Pre-adoption field investigation</p>
+            </div>
+            <span class="badge bg-info px-4 py-2 rounded-pill shadow-sm fs-6">CARA Regulation 8</span>
+        </div>
+    </div>
+
+    <!-- Parent Info Column -->
+    <div class="col-lg-4" data-aos="fade-right">
+        <div class="card glass border-0 p-4 h-100 shadow-sm border-start border-4 border-info">
+            <h5 class="fw-bold border-bottom pb-3 mb-4"><i class="fas fa-user-friends text-info me-2"></i>Prospective Parent</h5>
+            
+            <div class="d-flex flex-column gap-3">
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">Full Name</p>
+                    <h6 class="fw-bold mb-0">{{ study.parent.name }}</h6>
+                </div>
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">Contact Details</p>
+                    <h6 class="fw-bold mb-0">{{ study.parent.phone }}</h6>
+                    <small class="text-muted">{{ study.parent.email }}</small>
+                </div>
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">Residential Address</p>
+                    <h6 class="fw-bold mb-0 lh-sm">{{ study.parent.address }}</h6>
+                </div>
+            </div>
+
+            <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mt-4 small mb-0 shadow-sm">
+                <i class="fas fa-exclamation-triangle me-2 text-warning-emphasis"></i>
+                Home study must be completed and marked "Recommended" before this parent can officially apply for adoption.
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Column -->
+    <div class="col-lg-8" data-aos="fade-left">
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-primary">
+            <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-clipboard-check me-2"></i>Official Assessment Form</h5>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Investigation Date <span class="text-danger">*</span></label>
+                    <input type="date" name="visit_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-12"><hr class="my-2 opacity-25"></div>
+
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">House Condition <span class="text-danger">*</span></label>
+                    <select name="house_condition" class="form-select border-0 bg-light rounded-3 py-2" required>
+                        <option value="excellent">Excellent - Safe, clean, ample space</option>
+                        <option value="good">Good - Standard living conditions</option>
+                        <option value="average">Average - Acceptable</option>
+                        <option value="poor">Poor - Unsafe or severely cramped</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Financial Stability <span class="text-danger">*</span></label>
+                    <select name="financial_stability" class="form-select border-0 bg-light rounded-3 py-2" required>
+                        <option value="excellent">Excellent - Highly secure</option>
+                        <option value="good">Good - Stable income</option>
+                        <option value="average">Average - Modest income</option>
+                        <option value="poor">Poor - Insecure/In debt</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Family Environment <span class="text-danger">*</span></label>
+                    <select name="family_environment" class="form-select border-0 bg-light rounded-3 py-2" required>
+                        <option value="excellent">Excellent - Loving & supportive</option>
+                        <option value="good">Good - Harmonious</option>
+                        <option value="average">Average - Acceptable</option>
+                        <option value="poor">Poor - Tense/Conflict-ridden</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Neighborhood <span class="text-danger">*</span></label>
+                    <select name="neighborhood" class="form-select border-0 bg-light rounded-3 py-2" required>
+                        <option value="excellent">Excellent - Very safe</option>
+                        <option value="good">Good - Safe community</option>
+                        <option value="average">Average - Acceptable</option>
+                        <option value="poor">Poor - Unsafe environment</option>
+                    </select>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Reason for Adoption <span class="text-danger">*</span></label>
+                    <textarea name="reason_for_adoption" class="form-control border-0 bg-light rounded-3 py-2" rows="3" placeholder="Assess their genuine motivation..." required></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Existing Children?</label>
+                    <select name="existing_children" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Additional Notes & Observations</label>
+                    <textarea name="notes" class="form-control border-0 bg-light rounded-3 py-2" rows="3" placeholder="Any specific behavioral observations or concerns..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 d-block">Final Official Recommendation <span class="text-danger">*</span></label>
+                    <select name="recommendation" class="form-select border-0 bg-light rounded-3 py-3 fw-bold" required>
+                        <option value="recommended" class="text-success">✅ Recommended for Adoption</option>
+                        <option value="not_recommended" class="text-danger">❌ Not Recommended</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-lg fw-bold hover-lift">
+                        <i class="fas fa-file-signature me-2"></i> Sign and Submit Home Study Report
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

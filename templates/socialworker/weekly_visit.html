@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Weekly Foster Care Visit - Social Worker Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card glass border-primary">
+            <div class="card-body p-4">
+                <h4 class="mb-4 text-primary"><i class="fas fa-clipboard-list"></i> Weekly Foster Care Visit Report</h4>
+                
+                <div class="alert alert-info">
+                    <strong>👶 CHILD:</strong> {{ application.child.name }} ({{ application.child.age }} yrs)<br>
+                    <strong>👨‍👩‍👧 PARENT:</strong> {{ application.parent.name }}<br>
+                    <strong>🏠 ADDRESS:</strong> {{ application.parent.address }}
+                </div>
+
+                <form method="POST" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Visit Date</label>
+                            <input type="date" name="visit_date" class="form-control" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Child's Condition</label>
+                            <select name="child_condition" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="Excellent">Excellent</option>
+                                <option value="Good">Good</option>
+                                <option value="Concerning">Concerning</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Parent Behavior</label>
+                            <select name="parent_behavior" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="Excellent">Excellent</option>
+                                <option value="Good">Good</option>
+                                <option value="Concerning">Concerning</option>
+                                <option value="Abusive">Abusive / Hostile</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Is Child Happy?</label>
+                            <select name="child_happy" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="Yes">Yes, seems happy</option>
+                                <option value="Neutral">Neutral / Adjusting</option>
+                                <option value="No">No, seems unhappy</option>
+                                <option value="Scared">Scared / Terrified</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Any Marks or Injuries?</label>
+                            <select name="marks_or_injuries" class="form-select" required>
+                                <option value="">Select...</option>
+                                <option value="No">No</option>
+                                <option value="Yes">Yes (Details required below)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Detailed Observations</label>
+                            <textarea name="details" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Action Taken / Recommended</label>
+                            <textarea name="action_taken" class="form-control" rows="2" required></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="alert alert-danger mb-0 mt-3 border-danger">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="emergencyRemoval" name="emergency_removal">
+                                    <label class="form-check-label fw-bold text-danger ms-2" for="emergencyRemoval">
+                                        🚨 INITIATE EMERGENCY REMOVAL
+                                    </label>
+                                </div>
+                                <small class="d-block mt-2">
+                                    Check this ONLY if the child is in immediate danger, abused, or requires immediate removal from the foster home. This will terminate the foster care, notify police/court, and return the child.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary px-4 fw-bold"><i class="fas fa-save me-2"></i> Submit Weekly Report</button>
+                        <a href="{{ url_for('socialworker.dashboard') }}" class="btn btn-secondary px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

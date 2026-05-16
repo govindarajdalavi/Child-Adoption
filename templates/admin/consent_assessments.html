@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}Consent Assessments — Admin{% endblock %}
+{% block header_title %}Child Consent Assessments{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-down">
+        <div class="card glass border-0 p-4 shadow-sm"
+             style="background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff">
+            <div class="d-flex align-items-center gap-3">
+                <i class="fas fa-balance-scale fa-2x opacity-75"></i>
+                <div>
+                    <h5 class="fw-bold mb-1">JJ Act 2015 — Section 58(3)</h5>
+                    <p class="mb-0 small opacity-75">
+                        For children aged 5 years and above, consent assessment
+                        is mandatory before an adoption order can be issued.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PENDING ASSESSMENTS -->
+<div class="card glass border-0 p-4 mb-4 shadow-sm" data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-hourglass-half me-2 text-warning"></i>
+            Pending Consent Assessments
+        </h5>
+        <span class="badge bg-warning text-dark rounded-pill px-3">{{ pending|length }} Pending</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">App #</th>
+                    <th>Child</th>
+                    <th>Age</th>
+                    <th>Parent</th>
+                    <th>Assigned Worker</th>
+                    <th class="pe-4 text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in pending %}
+                <tr>
+                    <td class="ps-4 fw-bold text-primary">#{{ app.id }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ app.child.name }}</div>
+                        <small class="text-muted">{{ app.child.gender }}</small>
+                    </td>
+                    <td><span class="badge bg-danger rounded-pill">{{ app.child.age }} yrs</span></td>
+                    <td>
+                        <div class="small fw-semibold">{{ app.parent.name }}</div>
+                        <small class="text-muted">{{ app.parent.phone or '' }}</small>
+                    </td>
+                    <td>
+                        {% if app.consent_assigned_to %}
+                            {% set w = app.assigned_worker if app.assigned_worker else None %}
+                            <span class="badge bg-primary rounded-pill">
+                                Worker #{{ app.consent_assigned_to }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary rounded-pill">Not Assigned</span>
+                        {% endif %}
+                    </td>
+                    <td class="pe-4 text-end">
+                        <a href="{{ url_for('admin.review_application', app_id=app.id) }}"
+                           class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            <i class="fas fa-eye me-1"></i>Review
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="fas fa-check-circle text-success fa-2x mb-2 d-block"></i>
+                        No pending consent assessments.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- COMPLETED ASSESSMENTS -->
+<div class="card glass border-0 p-4 shadow-sm" data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-clipboard-check me-2 text-success"></i>
+            Completed Consent Assessments
+        </h5>
+        <span class="badge bg-success rounded-pill px-3">{{ completed|length }} Done</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">App #</th>
+                    <th>Child</th>
+                    <th>Age at Assessment</th>
+                    <th>Date</th>
+                    <th>Child's Reaction</th>
+                    <th>Recommendation</th>
+                    <th class="pe-4 text-end">Outcome</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in completed %}
+                {% if app.child_consent %}
+                {% set c = app.child_consent %}
+                <tr>
+                    <td class="ps-4 fw-bold text-primary">#{{ app.id }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ app.child.name }}</div>
+                        <small class="text-muted">{{ app.parent.name }}</small>
+                    </td>
+                    <td><span class="badge bg-light text-dark">{{ c.child_age_at_assessment }} yrs</span></td>
+                    <td><small>{{ c.assessment_date }}</small></td>
+                    <td>
+                        <span class="badge rounded-pill
+                            {% if c.child_reaction == 'happy' %}bg-success
+                            {% elif c.child_reaction == 'neutral' %}bg-secondary
+                            {% elif c.child_reaction == 'uncomfortable' %}bg-warning text-dark
+                            {% else %}bg-danger{% endif %}">
+                            {{ c.reaction_label }}
+                        </span>
+                    </td>
+                    <td>{{ c.recommendation_label }}</td>
+                    <td class="pe-4 text-end">
+                        <span class="badge rounded-pill
+                            {% if app.status == 'consent_refused' %}bg-danger
+                            {% elif app.status == 'admin_approved' or app.status == 'foster_care' %}bg-success
+                            {% else %}bg-warning text-dark{% endif %}">
+                            {{ app.status.replace('_', ' ').upper() }}
+                        </span>
+                    </td>
+                </tr>
+                {% endif %}
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-muted small">
+                        No completed consent assessments yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

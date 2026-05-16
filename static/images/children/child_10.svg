@@ -1,0 +1,56 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(252, 228, 236, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (Infant sitting spread) -->
+  <path d="M85 180 Q60 205 70 210" fill="none" stroke="#f7d09a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M115 180 Q140 205 130 210" fill="none" stroke="#f7d09a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- CLOTHES (Pink onesie) -->
+  <path d="M75 140 Q100 150 125 140 L135 185 Q100 200 65 185 Z" fill="#f48fb1"/>
+  <!-- Onesie snaps -->
+  <circle cx="100" cy="180" r="3" fill="#fce4ec"/>
+  <circle cx="90" cy="182" r="3" fill="#fce4ec"/>
+  <circle cx="110" cy="182" r="3" fill="#fce4ec"/>
+  <!-- NECK -->
+  <rect x="92" y="125" width="16" height="15" fill="#e8bc82"/>
+  <!-- ARMS (Chubby) -->
+  <path d="M70 145 Q50 160 75 175" fill="none" stroke="#f7d09a" stroke-width="16" stroke-linecap="round"/>
+  <path d="M130 145 Q150 160 125 175" fill="none" stroke="#f7d09a" stroke-width="16" stroke-linecap="round"/>
+  <path d="M65 140 L52 155 L68 160 Z" fill="#f48fb1"/>
+  <path d="M135 140 L148 155 L132 160 Z" fill="#f48fb1"/>
+  <!-- TOY (Rattle) -->
+  <rect x="115" y="165" width="6" height="25" rx="3" fill="#ffffff" transform="rotate(-30 118 177)"/>
+  <circle cx="130" cy="160" r="10" fill="#2196f3"/>
+  <circle cx="130" cy="160" r="4" fill="#ffff00"/>
+  <!-- HANDS -->
+  <circle cx="75" cy="175" r="9" fill="#f7d09a"/>
+  <circle cx="120" cy="170" r="9" fill="#f7d09a"/>
+  <!-- VERY BIG HEAD (Infant proportions) -->
+  <circle cx="100" cy="90" r="50" fill="#f7d09a"/>
+  <!-- EARS -->
+  <circle cx="50" cy="95" r="12" fill="#f7d09a"/>
+  <circle cx="150" cy="95" r="12" fill="#f7d09a"/>
+  <!-- HAIR (Tiny tuft) -->
+  <path d="M90 42 Q100 25 110 42" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M95 40 Q100 30 105 40" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- BINDI -->
+  <circle cx="100" cy="65" r="3" fill="#d50000"/>
+  <!-- EYES (Very Big) -->
+  <circle cx="80" cy="95" r="14" fill="white"/>
+  <circle cx="120" cy="95" r="14" fill="white"/>
+  <circle cx="80" cy="95" r="10" fill="#4e342e"/>
+  <circle cx="120" cy="95" r="10" fill="#4e342e"/>
+  <circle cx="80" cy="95" r="5" fill="#1a1a1a"/>
+  <circle cx="120" cy="95" r="5" fill="#1a1a1a"/>
+  <circle cx="84" cy="90" r="4" fill="white"/>
+  <circle cx="124" cy="90" r="4" fill="white"/>
+  <!-- EYEBROWS (Light) -->
+  <path d="M70 78 Q80 75 88 80" stroke="#5d4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M112 80 Q120 75 130 78" stroke="#5d4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- NOSE (Tiny button) -->
+  <circle cx="100" cy="105" r="3" fill="#e8bc82"/>
+  <!-- MOUTH (Small O) -->
+  <ellipse cx="100" cy="118" rx="4" ry="3" fill="#d84315"/>
+  <!-- CHEEKS (Extremely chubby) -->
+  <circle cx="68" cy="108" r="14" fill="rgba(255,130,80,0.4)"/>
+  <circle cx="132" cy="108" r="14" fill="rgba(255,130,80,0.4)"/>
+</svg>

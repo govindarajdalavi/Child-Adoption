@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}File Complaint - Parent{% endblock %}
+
+{% block header_title %}Grievance Redressal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8" data-aos="zoom-in">
+        <div class="card glass border-0 p-4 p-md-5 shadow-sm">
+            <div class="text-center mb-4">
+                <div class="icon-box mx-auto mb-3 bg-danger bg-opacity-10 text-danger" style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+                <h4 class="fw-bold mb-1">File a Complaint</h4>
+                <p class="text-muted small">Report issues regarding your adoption process</p>
+            </div>
+
+            <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 small shadow-sm">
+                <i class="fas fa-shield-alt me-2 text-warning-emphasis"></i>
+                This complaint will be directly reviewed by the <strong>District Admin</strong> and appropriate action will be taken under strict confidentiality.
+            </div>
+            
+            <div class="card bg-light border-0 rounded-4 p-3 mb-4 d-flex flex-row align-items-center gap-3">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                    <i class="fas fa-baby"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold">{{ application.child.name }}</h6>
+                    <small class="text-muted">Application Status: <span class="badge bg-secondary ms-1">{{ application.status.replace('_',' ').upper() }}</span></small>
+                </div>
+            </div>
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Describe Your Complaint <span class="text-danger">*</span></label>
+                    <textarea name="description" class="form-control border-0 bg-light rounded-3 py-3" rows="5" placeholder="Please describe the issue in detail, including dates, names, or specific events..." required></textarea>
+                </div>
+                
+                <div class="mb-4 p-3 rounded-3 border border-danger border-opacity-25 bg-danger bg-opacity-10">
+                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                        <input type="checkbox" name="is_urgent" class="form-check-input mt-0" id="urgent" value="1" style="width: 40px; height: 20px; cursor: pointer;">
+                        <label class="form-check-label text-danger mb-0" for="urgent" style="cursor: pointer;">
+                            <span class="fw-bold">Mark as URGENT</span> <small>(Only if child is at immediate risk)</small>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm hover-lift">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Complaint Securely
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

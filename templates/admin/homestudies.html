@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Studies - Admin{% endblock %}
+
+{% block header_title %}Home Study Monitoring & Reports{% endblock %}
+
+{% block content %}
+<div class="card glass border-0 p-0 overflow-hidden shadow-sm" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Investigation Records</h5>
+        <div class="input-group input-group-sm" style="width: 250px;">
+            <input type="text" id="tableSearch" class="form-control rounded-start-pill border-0 bg-light" placeholder="Search parent or worker...">
+            <span class="input-group-text rounded-end-pill border-0 bg-light"><i class="fas fa-search text-muted"></i></span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" id="studiesTable">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Parent / Family</th>
+                    <th>Assigned Social Worker</th>
+                    <th>Visit Status</th>
+                    <th>House & Finance</th>
+                    <th>Verdict</th>
+                    <th class="pe-4">Current Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in studies %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">{{ s.parent.name }}</div>
+                        <small class="text-muted">ID: #{{ s.parent_id }}</small>
+                    </td>
+                    <td>
+                        <div class="small fw-medium">{{ s.social_worker.name if s.social_worker else 'PENDING ASSIGNMENT' }}</div>
+                        <div class="extra-small text-muted">{{ s.social_worker.organization_name if s.social_worker else '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="small"><i class="fas fa-calendar-check me-1 text-muted"></i> {{ s.visit_date or 'TBD' }}</div>
+                    </td>
+                    <td>
+                        <div class="extra-small">House: <span class="fw-bold">{{ s.house_condition or '-' }}</span></div>
+                        <div class="extra-small">Finance: <span class="fw-bold">{{ s.financial_stability or '-' }}</span></div>
+                    </td>
+                    <td>
+                        {% if s.recommendation %}
+                        <span class="badge {{ 'bg-success' if s.recommendation == 'recommended' else 'bg-danger' }} bg-opacity-10 text-{{ 'success' if s.recommendation == 'recommended' else 'danger' }} rounded-pill px-3">
+                            {{ s.recommendation|upper }}
+                        </span>
+                        {% else %}
+                        <span class="text-muted small">---</span>
+                        {% endif %}
+                    </td>
+                    <td class="pe-4">
+                        <span class="badge badge-{{ s.status }}">
+                            {{ s.status.upper() }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('tableSearch').addEventListener('keyup', function() {
+    let filter = this.value.toUpperCase();
+    let rows = document.querySelector("#studiesTable tbody").rows;
+    for (let i = 0; i < rows.length; i++) {
+        let parentCol = rows[i].cells[0].textContent.toUpperCase();
+        let workerCol = rows[i].cells[1].textContent.toUpperCase();
+        if (parentCol.indexOf(filter) > -1 || workerCol.indexOf(filter) > -1) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

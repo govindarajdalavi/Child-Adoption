@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Parent Dashboard - DDCAPMS{% endblock %}
+
+{% block header_title %}Parent Dashboard{% endblock %}
+
+{% block content %}
+<!-- Alerts Section -->
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-down">
+        {% if not home_study %}
+        <div class="card glass border-0 bg-warning bg-opacity-10 shadow-sm overflow-hidden mb-3">
+            <div class="card-body p-4 d-flex align-items-center gap-4">
+                <div class="avatar-lg bg-warning bg-opacity-20 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="fas fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-warning-emphasis mb-1">Home Study Pending!</h5>
+                    <p class="text-muted small mb-0">Admin will assign a social worker to visit your home. You can browse children only after home study is completed.</p>
+                </div>
+            </div>
+        </div>
+        {% elif home_study.status == 'assigned' %}
+        <div class="card glass border-0 bg-info bg-opacity-10 shadow-sm overflow-hidden mb-3">
+            <div class="card-body p-4 d-flex align-items-center gap-4">
+                <div class="avatar-lg bg-info bg-opacity-20 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-info-emphasis mb-1">Home Study Assigned!</h5>
+                    <p class="text-muted small mb-0">Social worker will visit your home soon. Please be available for the verification process.</p>
+                </div>
+            </div>
+        </div>
+        {% elif home_study.status == 'completed' and home_study.recommendation == 'recommended' %}
+        <div class="card glass border-0 bg-success bg-opacity-10 shadow-sm overflow-hidden mb-3">
+            <div class="card-body p-4 d-flex align-items-center gap-4">
+                <div class="avatar-lg bg-success bg-opacity-20 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="fas fa-circle-check"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-success-emphasis mb-1">Home Study Approved!</h5>
+                    <p class="text-muted small mb-1">Congratulations! You are eligible to apply for adoption.</p>
+                    <a href="{{ url_for('parent.view_children') }}" class="btn btn-sm btn-success rounded-pill px-4 mt-2">Browse Children</a>
+                </div>
+            </div>
+        </div>
+        {% elif home_study.status == 'completed' and home_study.recommendation == 'not_recommended' %}
+        <div class="card glass border-0 bg-danger bg-opacity-10 shadow-sm overflow-hidden mb-3">
+            <div class="card-body p-4 d-flex align-items-center gap-4">
+                <div class="avatar-lg bg-danger bg-opacity-20 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="fas fa-circle-xmark"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-danger-emphasis mb-1">Home Study Not Recommended</h5>
+                    <p class="text-muted small mb-0">The social worker did not recommend adoption at this time. Please contact the admin for more information.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card glass" style="background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); cursor: pointer;" onclick="window.location='{{ url_for('parent.track') }}?status=all'">
+            <div class="icon-box"><i class="fas fa-file-invoice"></i></div>
+            <h2 class="stat-number" data-target="{{ applications|length }}">{{ applications|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">My Applications</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-card glass" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); cursor: pointer;" onclick="window.location='{{ url_for('parent.track') }}?status=pending'">
+            <div class="icon-box"><i class="fas fa-clock"></i></div>
+            <h2 class="stat-number" data-target="{{ applications|selectattr('status','eq','pending')|list|length }}">{{ applications|selectattr('status','eq','pending')|list|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Pending Review</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-card glass" style="background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%); cursor: pointer;" onclick="window.location='{{ url_for('parent.track') }}?status=hearing_scheduled'">
+            <div class="icon-box"><i class="fas fa-gavel"></i></div>
+            <h2 class="stat-number" data-target="{{ applications|selectattr('status','eq','hearing_scheduled')|list|length }}">{{ applications|selectattr('status','eq','hearing_scheduled')|list|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Hearings Scheduled</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-card glass" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); cursor: pointer;" onclick="window.location='{{ url_for('parent.track') }}?status=court_approved'">
+            <div class="icon-box"><i class="fas fa-heart"></i></div>
+            <h2 class="stat-number" data-target="{{ applications|selectattr('status','eq','court_approved')|list|length }}">{{ applications|selectattr('status','eq','court_approved')|list|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Applications Approved</p>
+        </div>
+    </div>
+</div>
+
+<!-- My Applications -->
+<div class="card glass border-0 p-4 shadow-sm" data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="mb-0 fw-bold">Recent Application Activities</h5>
+            <p class="text-muted small mb-0">Track your adoption journey progress</p>
+        </div>
+        <a href="{{ url_for('parent.view_children') }}" class="btn btn-primary rounded-pill px-4">
+            <i class="fas fa-search me-2"></i>Browse Children
+        </a>
+    </div>
+
+    <div class="row">
+        {% for app in applications %}
+        <div class="col-12 mb-3">
+            <div class="p-3 border border-white border-opacity-10 rounded-4 glass-hover transition-all">
+                <div class="row align-items-center">
+                    <div class="col-md-1 text-center">
+                        <div class="avatar-md bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 50px; height: 50px;">
+                            <i class="fas fa-baby fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <h6 class="fw-bold mb-1">{{ app.child.name }}</h6>
+                        <div class="d-flex gap-3 text-muted extra-small mb-2">
+                            <span><i class="fas fa-user-circle me-1"></i> {{ app.child.age }} years</span>
+                            <span><i class="fas fa-venus-mars me-1"></i> {{ app.child.gender }}</span>
+                            <span><i class="fas fa-calendar-alt me-1"></i> Applied: {{ app.applied_at.strftime('%d-%m-%Y') }}</span>
+                        </div>
+                        {% if app.hearing_date and app.status == 'hearing_scheduled' %}
+                        <div class="p-2 bg-danger bg-opacity-10 text-danger rounded-3 extra-small d-inline-block">
+                            <i class="fas fa-gavel me-2"></i>Court Hearing: {{ app.hearing_date }} at {{ app.hearing_time }} — {{ app.hearing_venue }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="badge badge-{{ app.status }} px-3 py-2 mb-2 d-inline-block">{{ app.status.replace('_',' ').upper() }}</span>
+                        <div class="mt-2">
+                            <a href="{{ url_for('parent.track') }}?app_id={{ app.id }}" class="btn btn-sm btn-light rounded-pill px-3 me-2">Track</a>
+                            {% if app.status in ['court_approved','completed'] %}
+                            <a href="{{ url_for('parent.file_complaint', app_id=app.id) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">Complaint</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if not applications %}
+        <div class="col-12 text-center py-5">
+            <div class="opacity-20 mb-3"><i class="fas fa-file-circle-plus fa-4x text-muted"></i></div>
+            <p class="text-muted">You haven't applied for any children yet.</p>
+            <a href="{{ url_for('parent.view_children') }}" class="btn btn-primary rounded-pill px-4">Start Browsing</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

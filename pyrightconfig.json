@@ -1,0 +1,12 @@
+{
+  "executionEnvironments": [
+    {
+      "root": "."
+    }
+  ],
+  "extraPaths": ["."],
+  "reportMissingModuleSource": false,
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false,
+  "typeCheckingMode": "off"
+}

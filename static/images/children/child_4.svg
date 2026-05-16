@@ -1,0 +1,66 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(255, 236, 179, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (standing) -->
+  <path d="M85 170 L85 205 Q85 210 90 210 L100 210" fill="none" stroke="#f4c07e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M115 170 L115 205 Q115 210 110 210 L100 210" fill="none" stroke="#f4c07e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- CLOTHES (Orange salwar kameez) -->
+  <path d="M70 120 Q100 130 130 120 L135 185 L65 185 Z" fill="#ff6d00"/>
+  <path d="M75 120 Q100 145 125 120 Z" fill="#e65100"/>
+  <path d="M65 185 L135 185 L140 195 L60 195 Z" fill="#ffd54f"/> <!-- Bottom hem -->
+  <!-- NECK -->
+  <rect x="94" y="112" width="12" height="15" fill="#e0a35e"/>
+  <!-- ARMS (Folded / holding brush) -->
+  <path d="M68 125 Q40 150 90 150" fill="none" stroke="#f4c07e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M132 125 Q160 150 110 150" fill="none" stroke="#f4c07e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M62 120 L48 135 L62 140 Z" fill="#ff6d00"/>
+  <path d="M138 120 L152 135 L138 140 Z" fill="#ff6d00"/>
+  <!-- BRUSH -->
+  <rect x="80" y="130" width="4" height="35" fill="#8d6e63" transform="rotate(30 82 147)"/>
+  <path d="M70 135 L76 130 Q78 125 80 130 L80 135 Z" fill="#bdbdbd" transform="rotate(30 82 147)"/>
+  <path d="M76 130 Q74 120 78 122 Q82 120 80 130 Z" fill="#1a1a1a" transform="rotate(30 82 147)"/>
+  <!-- HANDS -->
+  <circle cx="90" cy="150" r="5" fill="#f4c07e"/>
+  <circle cx="110" cy="150" r="5" fill="#f4c07e"/>
+  <!-- LONG HAIR (Back) -->
+  <path d="M60 90 Q50 150 55 180 Q60 190 70 180 Q65 150 70 100" fill="#1a1a1a"/>
+  <path d="M140 90 Q150 150 145 180 Q140 190 130 180 Q135 150 130 100" fill="#1a1a1a"/>
+  <!-- HEAD -->
+  <circle cx="100" cy="82" r="38" fill="#f4c07e"/>
+  <!-- EARS -->
+  <circle cx="62" cy="85" r="9" fill="#f4c07e"/>
+  <circle cx="138" cy="85" r="9" fill="#f4c07e"/>
+  <!-- FRONT HAIR -->
+  <path d="M62 82 Q65 40 100 38 Q135 40 138 82 Q120 45 100 45 Q80 45 62 82" fill="#1a1a1a"/>
+  <path d="M100 38 Q110 55 135 65 Q135 50 115 45 Z" fill="#1a1a1a"/>
+  <path d="M100 38 Q90 55 65 65 Q65 50 85 45 Z" fill="#1a1a1a"/>
+  <!-- FLOWERS IN HAIR -->
+  <circle cx="65" cy="70" r="5" fill="#ffeb3b"/>
+  <circle cx="135" cy="70" r="5" fill="#ffeb3b"/>
+  <circle cx="60" cy="120" r="4" fill="#ffeb3b"/>
+  <circle cx="140" cy="120" r="4" fill="#ffeb3b"/>
+  <!-- EYES -->
+  <circle cx="85" cy="82" r="11" fill="white"/>
+  <circle cx="115" cy="82" r="11" fill="white"/>
+  <circle cx="85" cy="82" r="8" fill="#4e342e"/>
+  <circle cx="115" cy="82" r="8" fill="#4e342e"/>
+  <circle cx="85" cy="82" r="4" fill="#1a1a1a"/>
+  <circle cx="115" cy="82" r="4" fill="#1a1a1a"/>
+  <circle cx="88" cy="78" r="3" fill="white"/>
+  <circle cx="118" cy="78" r="3" fill="white"/>
+  <!-- Long Eyelashes -->
+  <path d="M74 80 Q72 70 76 68" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M78 76 Q76 68 80 66" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M126 80 Q128 70 124 68" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M122 76 Q124 68 120 66" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- EYEBROWS -->
+  <path d="M75 66 Q85 64 93 68" stroke="#4e342e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M107 68 Q115 64 125 66" stroke="#4e342e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="92" r="2.5" fill="#e0a35e"/>
+  <!-- MOUTH -->
+  <path d="M90 102 Q100 110 110 102" stroke="#d84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- CHEEKS -->
+  <circle cx="73" cy="93" r="10" fill="rgba(255,130,80,0.3)"/>
+  <circle cx="127" cy="93" r="10" fill="rgba(255,130,80,0.3)"/>
+</svg>

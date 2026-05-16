@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Court Dashboard - DDCAPMS{% endblock %}
+
+{% block header_title %}District Judiciary Adoption Wing{% endblock %}
+
+{% block content %}
+<!-- Legal Status Overview -->
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm" style="background: var(--role-gradient);">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-white">
+                    <h4 class="fw-bold mb-1"><i class="fas fa-gavel me-2"></i>{{ current_user.organization_name }}</h4>
+                    <p class="opacity-70 small mb-0">Presiding over adoption petitions as per Juvenile Justice Act, 2015.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <div class="badge bg-white text-primary p-2 px-4 rounded-pill shadow-lg border-0 fw-bold">
+                        <i class="fas fa-balance-scale me-2"></i>Judicial Authority
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Case Procedural Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card glass" style="background: var(--role-gradient); border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('court.dashboard') }}'">
+            <div class="icon-box"><i class="fas fa-file-signature"></i></div>
+            <h2 class="stat-number" data-target="{{ pending|length }}">{{ pending|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Cases Pending Petition</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.9; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('court.dashboard') }}'">
+            <div class="icon-box"><i class="fas fa-hourglass-start"></i></div>
+            <h2 class="stat-number" data-target="{{ notice_period|length }}">{{ notice_period|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Notice Period Active</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.85; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('court.dashboard') }}'">
+            <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
+            <h2 class="stat-number" data-target="{{ scheduled|length }}">{{ scheduled|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Hearing Scheduled</p>
+        </div>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.8; border: 1px solid rgba(255,255,255,0.1);" onclick="window.location='{{ url_for('court.dashboard') }}'">
+            <div class="icon-box"><i class="fas fa-stamp"></i></div>
+            <h2 class="stat-number" data-target="{{ approved|length }}">{{ approved|length }}</h2>
+            <p class="mb-0 text-white-50 small fw-medium">Orders Issued</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Case Flow -->
+<div class="row g-4">
+    <!-- Step 1: File Petition -->
+    <div class="col-xl-6" data-aos="fade-right">
+        <div class="card glass border-0 p-4 h-100 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="fas fa-folder-plus text-warning me-2"></i>New Cases - Petition Filing</h6>
+            {% for app in pending %}
+            <div class="p-3 border rounded-4 bg-light bg-opacity-50 mb-3 border-opacity-10">
+                <div class="row align-items-center">
+                    <div class="col-md-7">
+                        <div class="fw-bold">{{ app.child.name }} <small class="text-muted fw-normal ms-1">(App #{{ app.id }})</small></div>
+                        <div class="extra-small text-muted"><i class="fas fa-user-friends me-1"></i> Parent: {{ app.parent.name }}</div>
+                        <div class="extra-small text-muted"><i class="fas fa-briefcase me-1"></i> Occupation: {{ app.occupation }}</div>
+                    </div>
+                    <div class="col-md-5">
+                        <form method="POST" action="{{ url_for('court.file_petition', app_id=app.id) }}" class="d-flex gap-2">
+                            <input type="date" name="petition_date" class="form-control form-control-sm rounded-pill" required>
+                            <button class="btn btn-primary btn-sm rounded-pill px-3"><i class="fas fa-file-upload"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if not pending %}<div class="text-center py-5 text-muted small">No new cases awaiting petition.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- Step 2: Notice Period Tracking -->
+    <div class="col-xl-6" data-aos="fade-left">
+        <div class="card glass border-0 p-4 h-100 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="fas fa-clock text-pink me-2"></i>Notice Period (30 Days)</h6>
+            {% for app in notice_period %}
+            <div class="p-3 border rounded-4 bg-light bg-opacity-50 mb-3 border-opacity-10 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fw-bold">{{ app.child.name }}</div>
+                    <div class="extra-small text-danger fw-bold"><i class="fas fa-hourglass-half me-1"></i> Started: {{ app.notice_period_start }}</div>
+                </div>
+                <a href="{{ url_for('court.schedule_final_hearing', app_id=app.id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Schedule Hearing</a>
+            </div>
+            {% endfor %}
+            {% if not notice_period %}<div class="text-center py-5 text-muted small">No cases in notice period.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- Step 3: Hearings -->
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm">
+            <h6 class="fw-bold mb-4"><i class="fas fa-calendar-days text-indigo me-2"></i>Upcoming Hearings</h6>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="extra-small text-uppercase text-muted">
+                            <th>Case / Child</th>
+                            <th>Hearing Date & Time</th>
+                            <th>Venue / Judge</th>
+                            <th class="text-end">Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in scheduled %}
+                        <tr>
+                            <td>
+                                <div class="fw-bold">{{ app.child.name }}</div>
+                                <small class="text-muted">Parent: {{ app.parent.name }}</small>
+                            </td>
+                            <td>
+                                <div class="badge bg-primary bg-opacity-10 text-primary px-3 rounded-pill">{{ app.final_hearing_date }} at {{ app.final_hearing_time }}</div>
+                            </td>
+                            <td>
+                                <div class="small fw-medium">{{ app.final_judge_name }}</div>
+                                <div class="extra-small text-muted">{{ app.final_hearing_venue }} (Room: {{ app.final_hearing_room }})</div>
+                            </td>
+                            <td class="text-end">
+                                <a href="{{ url_for('court.issue_final_order', app_id=app.id) }}" class="btn btn-sm btn-warning rounded-pill px-4">Update Outcome</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if not scheduled %}
+                        <tr><td colspan="4" class="text-center py-5 text-muted small">No hearings scheduled for the upcoming period.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4: Approved & Monitoring -->
+    <div class="col-12" data-aos="fade-up">
+        <div class="card glass border-0 p-4 shadow-sm border-top border-success border-4">
+            <h6 class="fw-bold mb-4 text-success"><i class="fas fa-certificate me-2"></i>Certified Adoptions - Post Monitoring</h6>
+            <div class="row g-3">
+                {% for app in approved %}
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-4 bg-success bg-opacity-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">{{ app.child.name }} <i class="fas fa-arrow-right text-muted mx-2"></i> {{ app.parent.name }}</div>
+                            <div class="extra-small text-muted">Order: {{ app.final_order_number }} ({{ app.final_order_date }})</div>
+                            <div class="extra-small fw-bold text-success mt-1"><i class="fas fa-check-double me-1"></i> Follow-ups: {{ app.followups|length }} / 3 Verified</div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            {% if app.final_order_scan %}
+                            <a href="/static/uploads/{{ app.final_order_scan }}" target="_blank" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-file-pdf"></i></a>
+                            {% endif %}
+                            {% if app.followups|length < 3 %}
+                            <a href="{{ url_for('court.assign_followup', app_id=app.id) }}" class="btn btn-sm btn-primary rounded-pill px-3">Assign Visit</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not approved %}<div class="col-12 text-center py-4 text-muted small">No adoption orders finalized yet.</div>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

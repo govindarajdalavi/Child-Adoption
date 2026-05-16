@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Issue Final Adoption Order - Court Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card glass border-success">
+            <div class="card-body p-4">
+                <h4 class="mb-4 text-success"><i class="fas fa-gavel"></i> Issue Final Adoption Order</h4>
+                
+                <div class="alert alert-success">
+                    <strong>⚖️ FINAL ADOPTION ORDER:</strong>
+                    This order finalizes the adoption process. The child will legally belong to the prospective parents, and they will need to collect the physical certificate from the court office.
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Hearing Result</label>
+                            <select name="result" class="form-select" required>
+                                <option value="">Select Result...</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"></div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Final Order Number</label>
+                            <input type="text" name="order_number" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Order Date</label>
+                            <input type="date" name="order_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Scanned Copy (PDF/JPG)</label>
+                            <input type="file" name="scanned_order" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-gavel"></i> Issue Final Order</button>
+                        <a href="{{ url_for('court.dashboard') }}" class="btn btn-secondary px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

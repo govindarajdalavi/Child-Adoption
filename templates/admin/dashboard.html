@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - DDCAPMS{% endblock %}
+
+{% block header_title %}District Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Notifications -->
+{% if notifications %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card glass border-0 shadow-sm overflow-hidden" data-aos="fade-up">
+            <div class="card-header bg-white bg-opacity-10 border-0 py-3">
+                <h6 class="mb-0 text-white">
+                    <i class="fas fa-bell me-2 text-warning"></i>
+                    Action Required ({{ notifications|length }})
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for n in notifications %}
+                    <div class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3 border-white border-opacity-10">
+                        <div>
+                            <div class="fw-bold small">{{ n.title }}</div>
+                            <div class="text-muted extra-small">{{ n.message[:120] }}...</div>
+                        </div>
+                        <a href="{{ url_for('admin.mark_read', nid=n.id) }}" class="btn btn-sm btn-light rounded-pill">
+                            <i class="fas fa-check"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <a href="{{ url_for('admin.manage_children') }}" class="stat-card-link">
+            <div class="stat-card glass" style="background: var(--role-gradient); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="icon-box"><i class="fas fa-baby"></i></div>
+                <h2 class="stat-number" data-target="{{ total_children }}">{{ total_children }}</h2>
+                <p class="mb-0 text-white-50 small fw-medium">Total Children</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+        <a href="{{ url_for('admin.manage_children') }}" class="stat-card-link">
+            <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.9; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="icon-box"><i class="fas fa-heart"></i></div>
+                <h2 class="stat-number" data-target="{{ available }}">{{ available }}</h2>
+                <p class="mb-0 text-white-50 small fw-medium">Available for Adoption</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <a href="{{ url_for('admin.manage_applications') }}" class="stat-card-link">
+            <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.85; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="icon-box"><i class="fas fa-file-invoice"></i></div>
+                <h2 class="stat-number" data-target="{{ pending_apps }}">{{ pending_apps }}</h2>
+                <p class="mb-0 text-white-50 small fw-medium">Pending Applications</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+        <a href="{{ url_for('admin.manage_applications') }}" class="stat-card-link">
+            <div class="stat-card glass" style="background: var(--role-gradient); opacity: 0.8; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="icon-box"><i class="fas fa-gavel"></i></div>
+                <h2 class="stat-number" data-target="{{ in_court }}">{{ in_court }}</h2>
+                <p class="mb-0 text-white-50 small fw-medium">Cases in Court</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6" data-aos="fade-right">
+        <div class="card glass border-0 h-100 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-bold mb-0">Application Status</h6>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light rounded-pill px-3" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu border-0 shadow-lg">
+                        <li><a class="dropdown-item" href="#">Download SVG</a></li>
+                        <li><a class="dropdown-item" href="#">View Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="appPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6" data-aos="fade-left">
+        <div class="card glass border-0 h-100 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-bold mb-0">Children Status Overview</h6>
+                <div class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">Live Updates</div>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="childBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-4" data-aos="fade-up">
+        <div class="card glass border-0 h-100 p-4">
+            <h6 class="fw-bold mb-4">Children by Age Group</h6>
+            <div style="height: 250px;">
+                <canvas id="ageDoughnutChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+        <div class="card glass border-0 h-100 p-4">
+            <h6 class="fw-bold mb-4">Monthly Adoption Applications</h6>
+            <div style="height: 250px;">
+                <canvas id="monthlyLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Applications Table -->
+<div class="card glass border-0 p-0 overflow-hidden" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0 fw-bold">Recent Applications</h5>
+            <p class="text-muted small mb-0">Manage and review latest adoption requests</p>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="input-group input-group-sm" style="width: 250px;">
+                <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+                <input type="text" id="appSearch" class="form-control bg-light border-0" placeholder="Search applications...">
+            </div>
+            <button class="btn btn-sm btn-primary rounded-pill px-3">View All</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle" id="appTable">
+            <thead>
+                <tr>
+                    <th class="ps-4">Application ID</th>
+                    <th>Parent Name</th>
+                    <th>Child Name</th>
+                    <th>Verification</th>
+                    <th>Status</th>
+                    <th>Applied Date</th>
+                    <th class="text-end pe-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in recent_apps %}
+                <tr>
+                    <td class="ps-4"><span class="fw-bold text-primary">#{{ app.id }}</span></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                {{ app.parent.name[0] }}
+                            </div>
+                            <span class="fw-medium">{{ app.parent.name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ app.child.name }}</td>
+                    <td>
+                        {% if app.age_validated %}
+                        <span class="badge bg-success bg-opacity-10 text-success"><i class="fas fa-check-circle me-1"></i> Verified</span>
+                        {% else %}
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ app.status }}">
+                            {{ app.status.replace('_',' ').upper() }}
+                        </span>
+                    </td>
+                    <td><span class="text-muted small">{{ app.applied_at.strftime('%d-%m-%Y') }}</span></td>
+                    <td class="text-end pe-4">
+                        <a href="{{ url_for('admin.review_application', app_id=app.id) }}" class="btn btn-sm btn-white glass shadow-sm rounded-pill px-3">
+                            Review <i class="fas fa-chevron-right ms-1 extra-small"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="noAppsFound" class="text-center py-5 d-none">
+        <i class="fas fa-search fa-3x text-muted mb-3 opacity-20"></i>
+        <p class="text-muted">No applications found matching your search</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Init table search
+        initTableSearch('appSearch', 'appTable');
+
+        // Chart.js Configuration
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: { family: 'Outfit', size: 12 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    padding: 12,
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    cornerRadius: 8,
+                    displayColors: true
+                }
+            }
+        };
+
+        // 1. Application Status Pie Chart
+        new Chart(document.getElementById('appPieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ app_status_labels | tojson }},
+                datasets: [{
+                    data: {{ app_status_data | tojson }},
+                    backgroundColor: [
+                        '#f59e0b', '#3b82f6', '#64748b',
+                        '#8b5cf6', '#10b981', '#ef4444'
+                    ],
+                    hoverOffset: 15,
+                    borderWidth: 0,
+                    spacing: 5
+                }]
+            },
+            options: {
+                ...chartOptions,
+                cutout: '70%'
+            }
+        });
+
+        // 2. Children Status Bar Chart
+        new Chart(document.getElementById('childBarChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ children_labels | tojson }},
+                datasets: [{
+                    label: 'Number of Children',
+                    data: {{ children_data | tojson }},
+                    backgroundColor: [
+                        '#64748b', '#f59e0b', '#10b981',
+                        '#3b82f6', '#8b5cf6', '#1a237e'
+                    ],
+                    borderRadius: 10,
+                    maxBarThickness: 40
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: { ...chartOptions.plugins, legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 3. Age Group Doughnut Chart
+        new Chart(document.getElementById('ageDoughnutChart'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ age_labels | tojson }},
+                datasets: [{
+                    data: {{ age_data | tojson }},
+                    backgroundColor: ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'],
+                    borderWidth: 0,
+                    spacing: 2
+                }]
+            },
+            options: {
+                ...chartOptions,
+                cutout: '60%'
+            }
+        });
+
+        // 4. Monthly Applications Line Chart
+        new Chart(document.getElementById('monthlyLineChart'), {
+            type: 'line',
+            data: {
+                labels: {{ monthly_labels | tojson }},
+                datasets: [{
+                    label: 'Applications',
+                    data: {{ monthly_data | tojson }},
+                    borderColor: '#1a237e',
+                    backgroundColor: 'rgba(26, 35, 126, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#1a237e',
+                    pointBorderWidth: 3
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: { ...chartOptions.plugins, legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { borderDash: [5, 5] } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

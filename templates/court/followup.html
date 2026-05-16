@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Post-Adoption Follow-up - Court{% endblock %}
+
+{% block header_title %}Judicial Review of Follow-up{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8" data-aos="fade-up">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0 fw-bold">Post Adoption Follow Up — Visit {{ visit_number }}</h5>
+            <span class="badge bg-primary px-3 py-2 rounded-pill shadow-sm">Court Record</span>
+        </div>
+
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-info">
+            <div class="row g-3">
+                <div class="col-sm-4 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Child</p>
+                    <h6 class="fw-bold mb-0 text-primary">{{ application.child.name }}</h6>
+                </div>
+                <div class="col-sm-4 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Parent</p>
+                    <h6 class="fw-bold mb-0">{{ application.applicant.name }}</h6>
+                </div>
+                <div class="col-sm-4">
+                    <p class="extra-small text-muted text-uppercase mb-1">Visit Number</p>
+                    <h6 class="fw-bold mb-0">{{ visit_number }} of 3</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 shadow-sm">
+            <i class="fas fa-info-circle me-2 text-warning-emphasis"></i>
+            <strong>3 successful follow up visits</strong> are required before the adoption is marked as <strong>FINAL</strong>. If status is marked <strong>Critical</strong>, the case will be sent back to court for immediate review.
+        </div>
+
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-primary">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Social Worker Name <span class="text-danger">*</span></label>
+                    <input type="text" name="social_worker_name" class="form-control border-0 bg-light rounded-3 py-2" placeholder="Name of visiting social worker" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Visit Date <span class="text-danger">*</span></label>
+                    <input type="date" name="visit_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Child's Health Condition <span class="text-danger">*</span></label>
+                    <input type="text" name="child_health" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Excellent, Good, Poor" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Is Child Happy?</label>
+                    <select name="child_happy" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Somewhat">Somewhat</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Going to School?</label>
+                    <select name="school_going" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Not School Age">Not School Age</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Any Complaints or Concerns?</label>
+                    <textarea name="complaints" class="form-control border-0 bg-light rounded-3 py-2" rows="3" placeholder="Describe any physical or emotional issues observed..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 d-block">Overall Status <span class="text-danger">*</span></label>
+                    <select name="status" class="form-select border-0 bg-light rounded-3 py-3 fw-bold" required>
+                        <option value="good" class="text-success">✅ Good — Child is happy and safe</option>
+                        <option value="concern" class="text-warning">⚠️ Concern — Minor issues found</option>
+                        <option value="critical" class="text-danger">🚨 Critical — Child at risk, needs action</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-lg fw-bold hover-lift">
+                        <i class="fas fa-save me-2"></i> File Follow-up Report into Court Record
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

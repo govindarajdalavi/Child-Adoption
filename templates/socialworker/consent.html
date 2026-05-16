@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+{% block title %}Child Consent Assessment{% endblock %}
+{% block header_title %}Child Consent Assessment{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── Legal banner ──────────────────────────────── */
+  .law-banner {
+    background: linear-gradient(135deg,#4a148c,#6a1b9a);
+    color:#fff;
+    border-radius:1rem;
+    padding:1.2rem 1.5rem;
+    margin-bottom:1.5rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    box-shadow:0 6px 20px rgba(74,20,140,.3);
+  }
+  .law-banner i { font-size:2rem; flex-shrink:0; }
+
+  /* ── Child + parent info card ─────────────────── */
+  .info-card {
+    background:var(--card-bg);
+    backdrop-filter:blur(12px);
+    border-radius:1rem;
+    padding:1.5rem;
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 4px 16px rgba(0,0,0,.06);
+  }
+  .child-photo-circle {
+    width:90px; height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(255,255,255,.4);
+  }
+
+  /* ── Reaction option cards ────────────────────── */
+  .reaction-option   { display:none; }
+  .reaction-label {
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+    padding:1rem 1.25rem;
+    border-radius:.75rem;
+    border:2px solid rgba(0,0,0,.08);
+    cursor:pointer;
+    transition:all .2s;
+    font-weight:500;
+  }
+  .reaction-option:checked + .reaction-label {
+    border-color:var(--accent-color);
+    background:rgba(59,130,246,.08);
+    box-shadow:0 0 0 3px rgba(59,130,246,.2);
+  }
+  .reaction-option.refused:checked + .reaction-label {
+    border-color:#ef4444; background:rgba(239,68,68,.06);
+    box-shadow:0 0 0 3px rgba(239,68,68,.2);
+  }
+  .emoji { font-size:1.4rem; }
+
+  /* ── Consent recommendation cards ─────────────── */
+  .consent-radio { display:none; }
+  .consent-card {
+    padding:1.2rem 1.5rem;
+    border-radius:.75rem;
+    border:2px solid rgba(0,0,0,.08);
+    cursor:pointer;
+    transition:all .2s;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+  }
+  .consent-radio:checked + .consent-card {
+    border-color:var(--accent-color);
+    background:rgba(59,130,246,.06);
+  }
+  .consent-radio[value="willing"]:checked + .consent-card {
+    border-color:#10b981; background:rgba(16,185,129,.06);
+  }
+  .consent-radio[value="needs_time"]:checked + .consent-card {
+    border-color:#f59e0b; background:rgba(245,158,11,.06);
+  }
+  .consent-radio[value="refused"]:checked + .consent-card {
+    border-color:#ef4444; background:rgba(239,68,68,.06);
+  }
+  .consent-icon { font-size:1.8rem; }
+
+  /* ── Warning box when refused ─────────────────── */
+  #refusal-warning {
+    display:none;
+    background:#fef2f2;
+    border:1.5px solid #ef4444;
+    border-radius:.75rem;
+    padding:1.2rem 1.5rem;
+    margin-top:1rem;
+    animation:fadeIn .3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0);   }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-2">
+
+  {# ── Legal notice banner ─────────────────────────── #}
+  <div class="law-banner" data-aos="fade-down">
+    <i class="fas fa-balance-scale"></i>
+    <div>
+      <div class="fw-bold fs-6">JJ Act 2015 — Section 58(3)</div>
+      <div class="small opacity-75">
+        For children aged <strong>5 years and above</strong>, the child's consent
+        is <strong>mandatory</strong> before an adoption order is issued.
+        If the child refuses, adoption <strong>cannot</strong> proceed.
+      </div>
+    </div>
+  </div>
+
+  <form method="POST"
+        action="{{ url_for('socialworker.consent_assessment', app_id=application.id) }}"
+        id="consentForm">
+
+    <div class="row g-4">
+
+      {# ── Left column: child + parent info ──────── #}
+      <div class="col-lg-4" data-aos="fade-right">
+
+        {# Child card #}
+        <div class="info-card mb-4 text-center">
+          <img src="/static/uploads/{{ application.child.photo }}"
+               onerror="this.src='https://ui-avatars.com/api/?name={{ application.child.name|urlencode }}&background=random&size=90'"
+               alt="{{ application.child.name }}"
+               class="child-photo-circle mb-3">
+          <h5 class="mb-1 fw-bold">{{ application.child.name }}</h5>
+          <p class="mb-1 text-muted">Age: <strong>{{ application.child.age }} years</strong></p>
+          <p class="mb-1 text-muted">Gender: {{ application.child.gender }}</p>
+          <p class="mb-1 text-muted small">{{ application.child.health_status }}</p>
+          {% if application.child.age >= 5 %}
+            <span class="badge bg-danger mt-1">Consent Mandatory</span>
+          {% else %}
+            <span class="badge bg-success mt-1">Consent Optional (< 5 yrs)</span>
+          {% endif %}
+        </div>
+
+        {# Parent card #}
+        <div class="info-card">
+          <h6 class="fw-bold mb-3">
+            <i class="fas fa-user-group me-2 text-primary"></i>Prospective Parent
+          </h6>
+          <p class="mb-1"><strong>Name:</strong> {{ application.parent.name }}</p>
+          <p class="mb-1"><strong>Phone:</strong> {{ application.parent.phone or '—' }}</p>
+          <p class="mb-1"><strong>Address:</strong>
+            {{ application.parent.address or '—' }}</p>
+          <p class="mb-0"><strong>App #:</strong> {{ application.id }}</p>
+        </div>
+
+      </div>{# /col-lg-4 #}
+
+      {# ── Right column: assessment form ──────────── #}
+      <div class="col-lg-8" data-aos="fade-left">
+        <div class="info-card">
+
+          <h5 class="fw-bold mb-4">
+            <i class="fas fa-clipboard-check me-2 text-purple"></i>
+            Consent Assessment Form
+          </h5>
+
+          {# Date #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Assessment Date</label>
+            <input type="date" name="assessment_date"
+                   id="assessmentDate"
+                   class="form-control"
+                   required>
+          </div>
+
+          {# Q1: Did child meet parents? #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Q1. Did the child meet the prospective parents today?
+            </label>
+            <div class="d-flex gap-3">
+              <div>
+                <input class="form-check-input me-1" type="radio"
+                       name="child_met_parents" id="met_yes" value="yes"
+                       required checked>
+                <label for="met_yes" class="form-check-label">
+                  ✅ Yes
+                </label>
+              </div>
+              <div>
+                <input class="form-check-input me-1" type="radio"
+                       name="child_met_parents" id="met_no" value="no">
+                <label for="met_no" class="form-check-label">
+                  ❌ No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {# Q2: Child's reaction #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Q2. Child's reaction to the prospective parents
+            </label>
+            <div class="row g-2">
+              {% set reactions = [
+                ('happy',         '😊', 'Happy and comfortable', 'success'),
+                ('neutral',       '😐', 'Neutral',               'secondary'),
+                ('uncomfortable', '😟', 'Uncomfortable',         'warning'),
+                ('refused',       '😨', 'Refused / Scared',      'danger')
+              ] %}
+              {% for val, emoji, label, color in reactions %}
+              <div class="col-6">
+                <input type="radio"
+                       id="reaction_{{ val }}"
+                       name="child_reaction"
+                       value="{{ val }}"
+                       class="reaction-option {% if val == 'refused' %}refused{% endif %}"
+                       required>
+                <label for="reaction_{{ val }}" class="reaction-label w-100">
+                  <span class="emoji">{{ emoji }}</span>
+                  <span>{{ label }}</span>
+                </label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          {# Q3: Verbal response (only relevant for >= 5 yrs) #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Q3. Child's Verbal Response
+              {% if application.child.age < 5 %}
+                <span class="badge bg-secondary ms-2">Child < 5 yrs — not legally required</span>
+              {% endif %}
+            </label>
+            <textarea name="verbal_response"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Write exactly what the child said (e.g., 'I like uncle and aunty'). Leave blank if child is non-verbal."></textarea>
+          </div>
+
+          {# Q4: Body language #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Q4. Body Language Observations</label>
+            <textarea name="body_language"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Describe posture, eye contact, gestures, facial expressions observed."></textarea>
+          </div>
+
+          {# Q5: Social worker recommendation #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Q5. Social Worker Recommendation
+            </label>
+
+            <div class="d-flex flex-column gap-2">
+              {# Willing #}
+              <div>
+                <input type="radio"
+                       id="consent_willing"
+                       name="consent_status"
+                       value="willing"
+                       class="consent-radio"
+                       required>
+                <label for="consent_willing" class="consent-card">
+                  <span class="consent-icon">✅</span>
+                  <div>
+                    <div class="fw-bold text-success">Child appears willing</div>
+                    <div class="small text-muted">
+                      Child shows genuine happiness and comfort with the
+                      prospective parents. Adoption may proceed.
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              {# Needs time #}
+              <div>
+                <input type="radio"
+                       id="consent_needs_time"
+                       name="consent_status"
+                       value="needs_time"
+                       class="consent-radio">
+                <label for="consent_needs_time" class="consent-card">
+                  <span class="consent-icon">⚠️</span>
+                  <div>
+                    <div class="fw-bold text-warning">Child needs more time</div>
+                    <div class="small text-muted">
+                      Child is uncertain or shy. A follow-up meeting is
+                      recommended before proceeding.
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              {# Refused #}
+              <div>
+                <input type="radio"
+                       id="consent_refused"
+                       name="consent_status"
+                       value="refused"
+                       class="consent-radio"
+                       onchange="showRefusalWarning()">
+                <label for="consent_refused" class="consent-card">
+                  <span class="consent-icon">❌</span>
+                  <div>
+                    <div class="fw-bold text-danger">Child refused</div>
+                    <div class="small text-muted">
+                      Child clearly refused or showed fear/distress. Under
+                      JJ Act §58(3) this <strong>stops</strong> the adoption.
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {# Refusal warning #}
+            <div id="refusal-warning">
+              <h6 class="text-danger fw-bold mb-2">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                Legal Notice — Child Refuses Adoption
+              </h6>
+              <ul class="mb-0 small text-danger">
+                <li>Under JJ Act 2015 §58(3), this adoption <strong>cannot proceed</strong>.</li>
+                <li>The application will be <strong>automatically paused</strong>.</li>
+                <li>The child will be <strong>returned to the available pool</strong>.</li>
+                <li>The prospective parent will be <strong>notified</strong>.</li>
+                <li>The court will be <strong>informed</strong>.</li>
+                <li>Admin will receive an <strong>urgent alert</strong>.</li>
+              </ul>
+            </div>
+          </div>
+
+          {# Additional notes #}
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Additional Notes</label>
+            <textarea name="notes"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Any other observations relevant to this assessment."></textarea>
+          </div>
+
+          {# Submit #}
+          <div class="d-flex gap-3 flex-wrap">
+            <button type="submit"
+                    id="submitBtn"
+                    class="btn btn-primary btn-lg px-5">
+              <i class="fas fa-paper-plane me-2"></i>Submit Assessment
+            </button>
+            <a href="{{ url_for('socialworker.dashboard') }}"
+               class="btn btn-outline-secondary btn-lg">
+              <i class="fas fa-arrow-left me-2"></i>Back
+            </a>
+          </div>
+
+        </div>{# /info-card #}
+      </div>{# /col-lg-8 #}
+    </div>{# /row #}
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Set today's date on assessment date field
+  document.addEventListener('DOMContentLoaded', () => {
+    const d = document.getElementById('assessmentDate');
+    if (d) {
+      const today = new Date().toISOString().split('T')[0];
+      d.value = today;
+    }
+  });
+
+  // Show red legal warning when social worker selects "refused"
+  function showRefusalWarning() {
+    const warning = document.getElementById('refusal-warning');
+    warning.style.display = 'block';
+  }
+
+  // Also hide warning if a different option is selected
+  document.querySelectorAll('.consent-radio').forEach(r => {
+    r.addEventListener('change', () => {
+      if (r.value !== 'refused') {
+        document.getElementById('refusal-warning').style.display = 'none';
+      } else {
+        showRefusalWarning();
+      }
+    });
+  });
+
+  // SweetAlert2 confirmation before submitting
+  document.getElementById('consentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const status = document.querySelector('.consent-radio:checked');
+    if (!status) {
+      Swal.fire('Incomplete', 'Please select a recommendation.', 'warning');
+      return;
+    }
+
+    const labels = {
+      willing:    { title: 'Confirm: Child Willing ✅',    icon: 'success',
+                    text: 'This will move the application to Pre-Adoption Foster Care.' },
+      needs_time: { title: 'Confirm: Needs More Time ⚠️',  icon: 'warning',
+                    text: 'The application will be paused and a re-assessment scheduled.' },
+      refused:    { title: '⚠️ Confirm: Child Refused ❌',  icon: 'error',
+                    text: 'This will PAUSE the adoption under JJ Act §58(3). '
+                        + 'All parties will be notified automatically.' }
+    };
+
+    const cfg = labels[status.value];
+    Swal.fire({
+      title: cfg.title,
+      text: cfg.text,
+      icon: cfg.icon,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, submit assessment',
+      cancelButtonText: 'Review again',
+      confirmButtonColor: status.value === 'refused' ? '#ef4444' : '#1a237e'
+    }).then(res => {
+      if (res.isConfirmed) {
+        // Show spinner
+        document.getElementById('submitBtn').innerHTML =
+          '<span class="spinner-border spinner-border-sm me-2"></span>Submitting…';
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('consentForm').submit();
+      }
+    });
+  });
+</script>
+{% endblock %}

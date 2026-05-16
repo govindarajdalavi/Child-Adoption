@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}My Children - Orphanage{% endblock %}
+
+{% block header_title %}Children Registry{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center" data-aos="fade-down">
+    <div class="col-md-4">
+        <h5 class="mb-0 fw-bold">All Registered Children</h5>
+        <p class="text-muted small mb-0">Manage and track verification status</p>
+    </div>
+    <div class="col-md-8 text-md-end mt-3 mt-md-0">
+        <div class="d-flex gap-2 justify-content-md-end flex-wrap">
+            <input type="text" id="childSearch" class="form-control form-control-sm border-0 shadow-sm" style="max-width:200px" placeholder="Search name..." oninput="filterChildren()">
+            <select id="statusFilter" class="form-select form-select-sm border-0 shadow-sm" style="max-width:150px" onchange="filterChildren()">
+                <option value="">All Status</option>
+                <option value="registered">Registered</option>
+                <option value="cwc_review">CWC Review</option>
+                <option value="legally_free">Legally Free</option>
+                <option value="available">Available</option>
+                <option value="under_process">Under Process</option>
+                <option value="foster_care">Foster Care</option>
+                <option value="court_process">Court Process</option>
+                <option value="adopted">Adopted</option>
+            </select>
+            <select id="genderFilter" class="form-select form-select-sm border-0 shadow-sm" style="max-width:120px" onchange="filterChildren()">
+                <option value="">All Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <a href="{{ url_for('orphanage.add_child') }}" class="btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus me-1"></i>New Child</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4" id="childrenGrid">
+    {% for child in children %}
+    <div class="col-sm-6 col-md-4 col-xl-3 child-card-container" data-name="{{ child.name|lower }}" data-status="{{ child.status }}" data-gender="{{ child.gender }}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+        <div class="card glass border-0 h-100 shadow-sm hover-lift text-center p-4">
+            <div class="mb-3 position-relative d-inline-block mx-auto child-photo-container">
+                <img src="/static/images/children/child_{{ child.id }}.svg" 
+                     onerror="this.src='/static/images/children/default_{{ child.gender|lower }}.svg'" 
+                     alt="{{ child.name }}"
+                     style="width:120px; height:120px;
+                            object-fit:contain;
+                            border-radius:50%;
+                            background:linear-gradient(
+                              135deg, #e8eaf6, #c5cae9);
+                            padding:5px;
+                            border:3px solid #1a237e;">
+                {% if child.status == 'legally_free' %}
+                <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle" title="Legally Free for Adoption" style="width: 20px; height: 20px; transform: translate(-10px, -10px);"></span>
+                {% endif %}
+            </div>
+            
+            <h6 class="fw-bold mb-1 text-truncate">{{ child.name }}</h6>
+            <div class="d-flex justify-content-center gap-2 mb-2">
+                <span class="badge bg-light text-dark border">{{ child.age }} yrs</span>
+                <span class="badge bg-light text-dark border">{{ child.gender }}</span>
+            </div>
+            
+            <p class="small text-muted mb-3 text-truncate"><i class="fas fa-notes-medical me-1 text-info"></i>{{ child.health_status }}</p>
+            
+            <div class="mt-auto">
+                <div class="mb-3">
+                    <span class="badge badge-{{ child.status }} rounded-pill px-3 py-2 w-100 shadow-sm">
+                        {{ child.status.replace('_',' ').upper() }}
+                    </span>
+                </div>
+                
+                {% if child.status == 'registered' %}
+                <form method="POST" action="{{ url_for('orphanage.submit_to_cwc', child_id=child.id) }}">
+                    <button type="submit" class="btn btn-warning btn-sm w-100 rounded-pill fw-bold shadow-sm">
+                        <i class="fas fa-paper-plane me-1"></i> Submit to CWC
+                    </button>
+                </form>
+                {% else %}
+                <button class="btn btn-light btn-sm w-100 rounded-pill border shadow-sm text-muted" disabled>
+                    <i class="fas fa-lock me-1"></i> Processing
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    {% if not children %}
+    <div class="col-12" data-aos="zoom-in">
+        <div class="card glass border-0 p-5 text-center shadow-sm">
+            <div class="mx-auto bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <i class="fas fa-baby fa-3x"></i>
+            </div>
+            <h5 class="fw-bold">No Children Registered</h5>
+            <p class="text-muted small mb-4">Start by registering children under your agency's care.</p>
+            <a href="{{ url_for('orphanage.add_child') }}" class="btn btn-primary px-4 rounded-pill shadow-sm">
+                <i class="fas fa-plus me-2"></i>Register First Child
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+function filterChildren() {
+    let nameFilter = document.getElementById('childSearch').value.toLowerCase();
+    let statusFilter = document.getElementById('statusFilter').value;
+    let genderFilter = document.getElementById('genderFilter').value;
+    
+    let cards = document.querySelectorAll('.child-card-container');
+    
+    cards.forEach(card => {
+        let name = card.getAttribute('data-name');
+        let status = card.getAttribute('data-status');
+        let gender = card.getAttribute('data-gender');
+        
+        let matchName = name.includes(nameFilter);
+        let matchStatus = statusFilter === "" || status === statusFilter;
+        let matchGender = genderFilter === "" || gender === genderFilter;
+        
+        if (matchName && matchStatus && matchGender) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+</script>
+{% endblock %}
+{% endblock %}

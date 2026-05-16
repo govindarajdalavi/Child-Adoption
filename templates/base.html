@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dharwad District Child Adoption Monitoring System{% endblock %}</title>
+    
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --accent-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-width: 280px;
+            --transition-speed: 0.4s;
+            
+            /* Unified Palette placeholders */
+            --role-primary: #1a237e;
+            --role-accent: #3b82f6;
+            --role-gradient: linear-gradient(135deg, #1a237e 0%, #312e81 100%);
+            --role-glow: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Role-Based Design Systems */
+        body[data-role="admin"] {
+            --role-primary: #1e1b4b;
+            --role-accent: #6366f1;
+            --role-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            --role-glow: rgba(99, 102, 241, 0.4);
+        }
+        body[data-role="collector"] {
+            --role-primary: #0f172a;
+            --role-accent: #3b82f6;
+            --role-gradient: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+            --role-glow: rgba(59, 130, 246, 0.4);
+        }
+        body[data-role="cwc"] {
+            --role-primary: #064e3b;
+            --role-accent: #10b981;
+            --role-gradient: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            --role-glow: rgba(16, 185, 129, 0.4);
+        }
+        body[data-role="court"] {
+            --role-primary: #7f1d1d;
+            --role-accent: #ef4444;
+            --role-gradient: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+            --role-glow: rgba(239, 68, 68, 0.4);
+        }
+        body[data-role="orphanage"] {
+            --role-primary: #7c2d12;
+            --role-accent: #f97316;
+            --role-gradient: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
+            --role-glow: rgba(249, 115, 22, 0.4);
+        }
+        body[data-role="socialworker"] {
+            --role-primary: #4c1d95;
+            --role-accent: #8b5cf6;
+            --role-gradient: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+            --role-glow: rgba(139, 92, 246, 0.4);
+        }
+        body[data-role="parent"] {
+            --role-primary: #134e4a;
+            --role-accent: #14b8a6;
+            --role-gradient: linear-gradient(135deg, #134e4a 0%, #0f766e 100%);
+            --role-glow: rgba(20, 184, 166, 0.4);
+        }
+
+        :root {
+            --primary-color: var(--role-primary);
+            --accent-color: var(--role-accent);
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --text-color: #f1f5f9;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-color, #1e293b);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed);
+        }
+
+        /* Glassmorphism Utility */
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+        }
+
+        .glass-hover:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            border-color: var(--accent-color);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: linear-gradient(180deg, var(--primary-color) 0%, #1e1b4b 100%);
+            color: white;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar .brand {
+            padding: 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar .brand i {
+            font-size: 1.8rem;
+            transition: transform 0.5s;
+        }
+
+        .sidebar .brand:hover i {
+            transform: rotateY(180deg);
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.8rem 1.5rem;
+            margin: 0.2rem 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .sidebar .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        .sidebar .nav-link.active {
+            color: white;
+            background: var(--role-accent);
+            box-shadow: 0 8px 20px var(--role-glow);
+            border: none;
+        }
+
+        .sidebar .nav-link i {
+            width: 24px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .sidebar .nav-link:hover i {
+            transform: scale(1.2) rotate(10deg);
+            color: white;
+        }
+
+        .sidebar .menu-title {
+            padding: 1.5rem 1.5rem 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+        }
+
+        /* User Profile in Sidebar */
+        .sidebar-user {
+            margin-top: auto;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2.5rem;
+            min-height: 100vh;
+            transition: all var(--transition-speed);
+            position: relative;
+            z-index: 1;
+            background: radial-gradient(circle at top right, var(--role-glow), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(255,255,255,0.02), transparent 20%);
+        }
+
+        .main-content.expanded {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: var(--card-bg);
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            border-radius: 24px;
+            padding: 1.8rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .stat-card-link {
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+            transition: transform 0.5s;
+        }
+
+        .stat-card:hover::after {
+            transform: scale(2);
+        }
+
+        .stat-card .icon-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            border-radius: 15px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background: rgba(0,0,0,0.02);
+            border-top: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            padding: 1rem 1.5rem;
+        }
+
+        .table td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .table tr:hover {
+            background-color: rgba(59, 130, 246, 0.02);
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-pending { background-color: var(--status-pending); color: #000; }
+        .badge-admin_approved { background-color: var(--status-admin-approved); }
+        .badge-foster_care { background-color: var(--status-foster-care); }
+        .badge-court_pending { background-color: var(--status-court-pending); }
+        .badge-hearing_scheduled { background-color: var(--status-hearing-scheduled); }
+        .badge-court_approved { background-color: var(--status-court-approved); }
+        .badge-completed { background-color: var(--status-completed); }
+        .badge-rejected { background-color: var(--status-rejected); }
+        .badge-available { background-color: var(--status-available); }
+        .badge-adopted { background-color: var(--status-adopted); }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Loading Spinner */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        .spinner-glow {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--primary-color);
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, glow 2s ease-in-out infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px var(--primary-color); } 50% { box-shadow: 0 0 20px var(--primary-color); } }
+
+        /* Scroll to top */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            z-index: 1001;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--accent-color);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -var(--sidebar-width);
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Removed legacy role theme logic */
+
+        /* Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1060;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-role="{{ current_user.role if current_user.is_authenticated else 'public' }}">
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner-glow"></div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="brand">
+            <i class="fas fa-child-reaching"></i>
+            <span class="brand-name">DDCAPMS</span>
+        </div>
+
+        <div class="menu-title">Main Navigation</div>
+        
+        {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('admin.manage_children') }}" class="nav-link {% if request.endpoint == 'admin.manage_children' %}active{% endif %}">
+                <i class="fas fa-baby"></i><span>Children</span>
+            </a>
+            <a href="{{ url_for('admin.manage_applications') }}" class="nav-link {% if request.endpoint == 'admin.manage_applications' %}active{% endif %}">
+                <i class="fas fa-file-invoice"></i><span>Applications</span>
+            </a>
+            <a href="{{ url_for('admin.manage_parents') }}" class="nav-link {% if request.endpoint == 'admin.manage_parents' %}active{% endif %}">
+                <i class="fas fa-user-group"></i><span>Parents</span>
+            </a>
+            <a href="{{ url_for('admin.verify_workers') }}" class="nav-link {% if request.endpoint == 'admin.verify_workers' %}active{% endif %}">
+                <i class="fas fa-user-check"></i><span>Verify Users</span>
+            </a>
+            <a href="{{ url_for('admin.complaints') }}" class="nav-link {% if request.endpoint == 'admin.complaints' %}active{% endif %}">
+                <i class="fas fa-circle-exclamation"></i><span>Complaints</span>
+            </a>
+        {% elif current_user.role == 'parent' %}
+            <a href="{{ url_for('parent.dashboard') }}" class="nav-link {% if request.endpoint == 'parent.dashboard' %}active{% endif %}">
+                <i class="fas fa-home"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('parent.view_children') }}" class="nav-link {% if request.endpoint == 'parent.view_children' %}active{% endif %}">
+                <i class="fas fa-baby-carriage"></i><span>Browse Children</span>
+            </a>
+            <a href="{{ url_for('parent.track') }}" class="nav-link {% if request.endpoint == 'parent.track' %}active{% endif %}">
+                <i class="fas fa-magnifying-glass-location"></i><span>Track Status</span>
+            </a>
+            <a href="{{ url_for('parent.notifications') }}" class="nav-link {% if request.endpoint == 'parent.notifications' %}active{% endif %}">
+                <i class="fas fa-bell"></i><span>Notifications</span>
+            </a>
+        {% elif current_user.role == 'collector' %}
+            <a href="{{ url_for('collector.dashboard') }}" class="nav-link {% if request.endpoint == 'collector.dashboard' %}active{% endif %}">
+                <i class="fas fa-gauge-high"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('collector.manage_users') }}" class="nav-link {% if request.endpoint == 'collector.manage_users' %}active{% endif %}">
+                <i class="fas fa-users-gear"></i><span>Manage Users</span>
+            </a>
+            <a href="{{ url_for('collector.view_complaints') }}" class="nav-link {% if request.endpoint == 'collector.view_complaints' %}active{% endif %}">
+                <i class="fas fa-triangle-exclamation"></i><span>Complaints</span>
+            </a>
+        {% elif current_user.role == 'cwc' %}
+            <a href="{{ url_for('cwc.dashboard') }}" class="nav-link {% if request.endpoint == 'cwc.dashboard' %}active{% endif %}">
+                <i class="fas fa-shield-heart"></i><span>Dashboard</span>
+            </a>
+
+        {% elif current_user.role == 'orphanage' %}
+            <a href="{{ url_for('orphanage.dashboard') }}" class="nav-link {% if request.endpoint == 'orphanage.dashboard' %}active{% endif %}">
+                <i class="fas fa-house-chimney-window"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('orphanage.add_child') }}" class="nav-link {% if request.endpoint == 'orphanage.add_child' %}active{% endif %}">
+                <i class="fas fa-child-plus"></i><span>Add Child</span>
+            </a>
+            <a href="{{ url_for('orphanage.my_children') }}" class="nav-link {% if request.endpoint == 'orphanage.my_children' %}active{% endif %}">
+                <i class="fas fa-baby"></i><span>Our Children</span>
+            </a>
+        {% elif current_user.role == 'socialworker' %}
+            <a href="{{ url_for('socialworker.dashboard') }}" class="nav-link {% if request.endpoint == 'socialworker.dashboard' %}active{% endif %}">
+                <i class="fas fa-briefcase"></i><span>Dashboard</span>
+            </a>
+
+        {% elif current_user.role == 'court' %}
+            <a href="{{ url_for('court.dashboard') }}" class="nav-link {% if request.endpoint == 'court.dashboard' %}active{% endif %}">
+                <i class="fas fa-gavel"></i><span>Dashboard</span>
+            </a>
+        {% endif %}
+
+        <div class="menu-title">System</div>
+        <a href="#" id="dark-mode-toggle" class="nav-link">
+            <i class="fas fa-moon"></i><span>Dark Mode</span>
+        </a>
+        <a href="{{ url_for('auth.logout') }}" class="nav-link text-danger mt-4">
+            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+        </a>
+
+        <div class="sidebar-user">
+            <div class="glass-glow" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: var(--role-glow); opacity: 0.1; z-index: -1;"></div>
+            <img src="{{ url_for('static', filename='uploads/' ~ current_user.photo) if current_user.photo else 'https://ui-avatars.com/api/?name=' ~ current_user.name|urlencode ~ '&background=random' }}" 
+                 onerror="this.src='https://ui-avatars.com/api/?name={{ current_user.name|urlencode }}&background=random'" 
+                 alt="User" class="user-avatar shadow">
+            <div class="user-info">
+                <div class="fw-bold small text-truncate" style="max-width: 130px;">{{ current_user.name }}</div>
+                <div class="opacity-50" style="font-size: 0.7rem;">{{ current_user.role|replace('_', ' ')|upper }}</div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="main-content {% if not current_user.is_authenticated %}m-0{% endif %}" id="main-content">
+        <!-- Toast Notification Container -->
+        <div class="toast-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="toast show glass border-0 shadow-lg mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-aos="fade-left">
+                            <div class="toast-header bg-transparent border-0">
+                                <i class="fas {% if category == 'success' %}fa-check-circle text-success{% elif category == 'danger' %}fa-times-circle text-danger{% else %}fa-circle-info text-primary{% endif %} me-2"></i>
+                                <strong class="me-auto">Notification</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% if current_user.is_authenticated %}
+        <div class="page-header" data-aos="fade-down">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-lg-none" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button class="btn btn-white glass shadow-sm rounded-pill px-3" onclick="history.back()">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </button>
+                <h4 class="mb-0 fw-bold">{% block header_title %}Overview{% endblock %}</h4>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="dropdown">
+                    <button class="btn btn-white glass shadow-sm rounded-pill px-3 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell me-2 text-warning"></i>
+                        <span class="badge bg-danger rounded-pill">{% if notifications %}{{ notifications|length }}{% else %}0{% endif %}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end glass border-0 shadow-lg p-2" style="width: 300px;">
+                        <li class="dropdown-header border-bottom mb-2">Recent Notifications</li>
+                        {% if notifications %}
+                            {% for n in notifications[:5] %}
+                                <li>
+                                    <a class="dropdown-item rounded-3 py-2" href="#">
+                                        <div class="fw-bold small">{{ n.title }}</div>
+                                        <div class="text-muted small text-truncate">{{ n.message }}</div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center text-primary small" href="#">View All Notifications</a></li>
+                        {% else %}
+                            <li class="text-center py-3 text-muted">No new notifications</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <img src="{{ url_for('static', filename='uploads/' ~ current_user.photo) if current_user.photo else 'https://ui-avatars.com/api/?name=' ~ current_user.name|urlencode ~ '&background=random' }}" 
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ current_user.name|urlencode }}&background=random'" 
+                     alt="User" class="user-avatar shadow-sm">
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="container-fluid p-0">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Back to top -->
+    <button id="back-to-top" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JS Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Loading Overlay
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-overlay');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        });
+
+        // Sidebar Toggle for Mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+            });
+        }
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const htmlElement = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlElement.setAttribute('data-bs-theme', 'dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Light Mode</span>';
+        }
+
+        darkModeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (htmlElement.getAttribute('data-bs-theme') === 'dark') {
+                htmlElement.removeAttribute('data-bs-theme');
+                localStorage.setItem('theme', 'light');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Dark Mode</span>';
+            } else {
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Light Mode</span>';
+            }
+        });
+
+        // Back to Top
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Animated Counters
+        function animateCounter(element, target) {
+            let current = 0;
+            const duration = 1500;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, stepTime);
+        }
+
+        document.querySelectorAll('.stat-number').forEach(el => {
+            const target = parseInt(el.getAttribute('data-target') || el.textContent.replace(/,/g, ''));
+            if (!isNaN(target)) {
+                el.textContent = '0';
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        animateCounter(el, target);
+                        observer.unobserve(el);
+                    }
+                });
+                observer.observe(el);
+            }
+        });
+
+        // Table Search
+        function initTableSearch(inputId, tableId) {
+            const input = document.getElementById(inputId);
+            const table = document.getElementById(tableId);
+            if (!input || !table) return;
+
+            input.addEventListener('input', () => {
+                const filter = input.value.toLowerCase();
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
+            });
+        }
+
+        // Form Validation UI
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Confirmation Dialogs
+        function confirmAction(title, text, icon, callback) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary-color)',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, proceed!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    callback();
+                }
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

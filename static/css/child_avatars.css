@@ -1,0 +1,44 @@
+/* static/css/child_avatars.css */
+
+.child-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  font-size: 48px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 3px solid #fff;
+}
+
+.child-avatar-1 { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+.child-avatar-1::after { content: "🏏"; }
+
+.child-avatar-2 { background: linear-gradient(135deg, #e91e8c, #f48fb1); }
+.child-avatar-2::after { content: "🪆"; }
+
+.child-avatar-3 { background: linear-gradient(135deg, #2e7d32, #81c784); }
+.child-avatar-3::after { content: "📚"; }
+
+.child-avatar-4 { background: linear-gradient(135deg, #ff6d00, #ffb74d); }
+.child-avatar-4::after { content: "🎨"; }
+
+.child-avatar-5 { background: linear-gradient(135deg, #c62828, #ef5350); }
+.child-avatar-5::after { content: "⚽"; }
+
+.child-avatar-6 { background: linear-gradient(135deg, #f9a825, #fff59d); }
+.child-avatar-6::after { content: "🎵"; }
+
+.child-avatar-7 { background: linear-gradient(135deg, #ffffff, #e0e0e0); }
+.child-avatar-7::after { content: "🎒"; }
+
+.child-avatar-8 { background: linear-gradient(135deg, #6a1b9a, #ce93d8); }
+.child-avatar-8::after { content: "🌸"; }
+
+.child-avatar-9 { background: linear-gradient(135deg, #e65100, #ffcc80); }
+.child-avatar-9::after { content: "✏️"; }
+
+.child-avatar-10 { background: linear-gradient(135deg, #f48fb1, #fce4ec); }
+.child-avatar-10::after { content: "🎀"; }

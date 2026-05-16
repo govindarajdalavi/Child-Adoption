@@ -1,0 +1,62 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(227, 242, 253, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (Standing straight) -->
+  <path d="M85 170 L85 210" fill="none" stroke="#d4935e" stroke-width="12" stroke-linecap="round"/>
+  <path d="M115 170 L115 210" fill="none" stroke="#d4935e" stroke-width="12" stroke-linecap="round"/>
+  <path d="M75 210 L95 210" fill="none" stroke="#212121" stroke-width="8" stroke-linecap="round"/> <!-- Shoes -->
+  <path d="M105 210 L125 210" fill="none" stroke="#212121" stroke-width="8" stroke-linecap="round"/>
+  <!-- SHORTS -->
+  <path d="M70 160 Q100 170 130 160 L125 180 Q100 185 75 180 Z" fill="#0d47a1"/>
+  <!-- SHIRT (White uniform) -->
+  <path d="M70 120 Q100 125 130 120 L130 160 Q100 170 70 160 Z" fill="#ffffff"/>
+  <!-- Collar & Tie -->
+  <path d="M85 120 L100 130 L115 120 Z" fill="#f5f5f5"/>
+  <path d="M100 130 L105 155 L95 155 Z" fill="#b71c1c"/>
+  <!-- NECK -->
+  <rect x="94" y="110" width="12" height="15" fill="#c07a45"/>
+  <!-- ARMS -->
+  <!-- Left arm straight -->
+  <path d="M70 125 L65 170" fill="none" stroke="#d4935e" stroke-width="10" stroke-linecap="round"/>
+  <!-- Right arm holding bag -->
+  <path d="M130 125 L135 150 L125 165" fill="none" stroke="#d4935e" stroke-width="10" stroke-linecap="round"/>
+  <!-- Sleeves -->
+  <path d="M65 120 L58 140 L70 142 Z" fill="#ffffff"/>
+  <path d="M135 120 L142 140 L130 142 Z" fill="#ffffff"/>
+  <!-- SCHOOL BAG -->
+  <rect x="110" y="160" width="25" height="30" rx="3" fill="#1565c0"/>
+  <rect x="115" y="165" width="15" height="10" rx="2" fill="#1976d2"/>
+  <path d="M122 155 L122 160" stroke="#0d47a1" stroke-width="3"/>
+  <!-- HANDS -->
+  <circle cx="65" cy="170" r="6" fill="#d4935e"/>
+  <circle cx="125" cy="165" r="6" fill="#d4935e"/>
+  <!-- HEAD -->
+  <circle cx="100" cy="85" r="40" fill="#d4935e"/>
+  <!-- EARS -->
+  <circle cx="60" cy="88" r="10" fill="#d4935e"/>
+  <circle cx="140" cy="88" r="10" fill="#d4935e"/>
+  <!-- HAIR (Neat Combed Side Part) -->
+  <path d="M60 80 Q60 45 100 40 Q140 45 140 80 Q130 65 110 50 Q80 40 60 80" fill="#1a1a1a"/>
+  <path d="M110 50 Q120 55 135 60 Q125 45 110 50" fill="#1a1a1a"/>
+  <!-- Part line -->
+  <path d="M110 40 L105 55" stroke="#d4935e" stroke-width="1.5"/>
+  <!-- EYES (Confident) -->
+  <circle cx="85" cy="85" r="9" fill="white"/>
+  <circle cx="115" cy="85" r="9" fill="white"/>
+  <circle cx="85" cy="85" r="6" fill="#4e342e"/>
+  <circle cx="115" cy="85" r="6" fill="#4e342e"/>
+  <circle cx="85" cy="85" r="3" fill="#1a1a1a"/>
+  <circle cx="115" cy="85" r="3" fill="#1a1a1a"/>
+  <circle cx="88" cy="83" r="2" fill="white"/>
+  <circle cx="118" cy="83" r="2" fill="white"/>
+  <!-- EYEBROWS (Straight) -->
+  <path d="M75 75 L95 75" stroke="#4e342e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M105 75 L125 75" stroke="#4e342e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="95" r="3" fill="#c07a45"/>
+  <!-- MOUTH (Proud smile) -->
+  <path d="M88 105 Q100 110 112 105" stroke="#5d4037" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- CHEEKS -->
+  <circle cx="75" cy="95" r="7" fill="rgba(255,130,80,0.3)"/>
+  <circle cx="125" cy="95" r="7" fill="rgba(255,130,80,0.3)"/>
+</svg>

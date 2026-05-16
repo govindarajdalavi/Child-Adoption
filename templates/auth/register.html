@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Registration - Dharwad Adoption{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper min-vh-100 d-flex align-items-center py-5">
+    <div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-white glass text-white shadow-sm rounded-pill px-4">
+            <i class="fas fa-arrow-left me-2"></i>Back to Login
+        </a>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-xl-6" data-aos="zoom-in">
+                <div class="card glass border-0 shadow-lg p-4 p-md-5">
+                    <div class="text-center mb-5">
+                        <div class="icon-box mx-auto mb-3 bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h3 class="fw-bold mb-1">Create Account</h3>
+                        <p class="text-muted small">Join the District Adoption Monitoring Network</p>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" class="row g-3">
+                        <!-- Role Selection -->
+                        <div class="col-12 mb-2">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Account Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-id-badge text-primary"></i></span>
+                                <select name="role" class="form-select border-0 bg-light" id="roleSelect" onchange="toggleFields()">
+                                    <option value="parent">Prospective Adoptive Parent (PAP)</option>
+                                    <option value="orphanage">Specialized Adoption Agency (SAA)</option>
+                                    <option value="socialworker">Authorized Social Worker</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Basic Fields -->
+                        <div class="col-md-6">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Full Name</label>
+                            <input type="text" name="name" class="form-control border-0 bg-light rounded-3" placeholder="Enter name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Email Address</label>
+                            <input type="email" name="email" class="form-control border-0 bg-light rounded-3" placeholder="email@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Password</label>
+                            <input type="password" name="password" class="form-control border-0 bg-light rounded-3" placeholder="••••••••" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Contact Number</label>
+                            <input type="text" name="phone" class="form-control border-0 bg-light rounded-3" placeholder="10-digit mobile">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase">Current Address</label>
+                            <textarea name="address" class="form-control border-0 bg-light rounded-3" rows="2" placeholder="Full residential/office address"></textarea>
+                        </div>
+
+                        <!-- Profile Photo -->
+                        <div class="col-12 text-center py-3 border rounded-4 bg-light bg-opacity-50 mb-2">
+                            <label class="form-label extra-small fw-bold text-muted text-uppercase d-block mb-3">Identity Photo</label>
+                            <div class="position-relative d-inline-block">
+                                <img id="photoPreview" src="/static/images/default_user.png" class="rounded-circle shadow-sm mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid white;">
+                                <label for="photoInput" class="btn btn-sm btn-primary rounded-circle position-absolute bottom-0 end-0 mb-3 me-0 shadow" style="width:32px;height:32px;padding:6px;">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" name="photo" id="photoInput" class="d-none" accept=".jpg,.jpeg,.png" onchange="previewPhoto(this)">
+                            </div>
+                            <p class="extra-small text-muted mb-0">Tap the camera icon to upload</p>
+                        </div>
+
+                        <!-- Orphanage Fields -->
+                        <div id="orphanageFields" class="col-12" style="display:none">
+                            <div class="p-3 rounded-4 border-start border-4 border-info bg-info bg-opacity-5 mb-3">
+                                <h6 class="fw-bold text-info small mb-1"><i class="fas fa-building me-2"></i>Agency Credentials</h6>
+                                <p class="extra-small text-muted mb-3">SAA registration and licensing documents are required for system activation.</p>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <input type="text" name="organization_name" class="form-control form-control-sm border-0 bg-white" placeholder="Agency Official Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="license_number" class="form-control form-control-sm border-0 bg-white" placeholder="Registration/License #">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="extra-small fw-bold text-muted mb-2">Registration Certificate (PDF/JPG)</label>
+                                        <input type="file" name="org_license" class="form-control form-control-sm border-0 bg-white" accept=".pdf,.jpg,.jpeg,.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Worker Fields -->
+                        <div id="swFields" class="col-12" style="display:none">
+                            <div class="p-3 rounded-4 border-start border-4 border-primary bg-primary bg-opacity-5 mb-3">
+                                <h6 class="fw-bold text-primary small mb-1"><i class="fas fa-user-shield me-2"></i>Professional Accreditation</h6>
+                                <p class="extra-small text-muted mb-3">Authorized field investigators must provide their professional license or WCD ID.</p>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <input type="text" name="organization_name" class="form-control form-control-sm border-0 bg-white" placeholder="Dept/Organization">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="designation" class="form-control form-control-sm border-0 bg-white" placeholder="Official Designation">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" name="license_number" class="form-control form-control-sm border-0 bg-white" placeholder="Social Worker License #">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="extra-small fw-bold text-muted mb-2">License Doc</label>
+                                        <input type="file" name="sw_license" class="form-control form-control-sm border-0 bg-white" accept=".pdf,.jpg,.jpeg,.png">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="extra-small fw-bold text-muted mb-2">WCD ID Card</label>
+                                        <input type="file" name="employee_id" class="form-control form-control-sm border-0 bg-white" accept=".pdf,.jpg,.jpeg,.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-lg fw-bold">
+                                <i class="fas fa-user-plus me-2"></i> Register New Account
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted small">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-primary fw-bold text-decoration-none">Secure Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-wrapper {
+    background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+    position: relative;
+    overflow: hidden;
+}
+.auth-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+}
+</style>
+
+<script>
+function toggleFields() {
+    var role = document.getElementById('roleSelect').value;
+    var orphanageFields = document.getElementById('orphanageFields');
+    var swFields = document.getElementById('swFields');
+    orphanageFields.style.display = (role === 'orphanage') ? 'block' : 'none';
+    swFields.style.display = (role === 'socialworker') ? 'block' : 'none';
+}
+
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('photoPreview').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

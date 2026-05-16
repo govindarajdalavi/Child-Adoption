@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Adoption - Parent{% endblock %}
+
+{% block header_title %}Adoption Application{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10" data-aos="fade-up">
+        
+        <!-- Child Info Card -->
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-primary">
+            <div class="d-flex align-items-center gap-4">
+                <img src="/static/uploads/{{ child.photo }}" onerror="this.src='/static/images/default_child.png'" 
+                     class="rounded-circle shadow-sm" style="width:80px;height:80px;object-fit:cover;border:3px solid white">
+                <div>
+                    <h5 class="fw-bold mb-1 text-primary">Applying for: {{ child.name }}</h5>
+                    <p class="mb-0 text-muted">{{ child.age }} years old • {{ child.gender }} • {{ child.health_status }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARA Age Rules Info Box -->
+        <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 shadow-sm">
+            <h6 class="fw-bold text-warning-emphasis mb-2"><i class="fas fa-exclamation-triangle me-2"></i>CARA Guidelines 2022 — Age Requirements</h6>
+            <ul class="mb-0 small text-warning-emphasis">
+                <li>Minimum parent age: <strong>25 years</strong></li>
+                {% if child.age <= 2 %}
+                <li>For child aged 0-2 years: Maximum parent age <strong>45 years</strong></li>
+                {% elif child.age <= 8 %}
+                <li>For child aged 2-8 years: Maximum parent age <strong>50 years</strong></li>
+                {% else %}
+                <li>For child aged 8-18 years: Maximum parent age <strong>55 years</strong></li>
+                {% endif %}
+                <li>Minimum <strong>25 years age gap</strong> required between parent and child</li>
+                <li>Maximum combined age of couple: <strong>110 years</strong></li>
+            </ul>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" id="applyForm" class="card glass border-0 p-4 p-md-5 shadow-sm">
+
+            <!-- AGE VALIDATION SECTION -->
+            <div class="p-4 rounded-4 bg-light bg-opacity-50 border mb-4">
+                <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-user-check me-2"></i>Age Verification <span class="badge bg-danger ms-2">Required</span></h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label extra-small fw-bold text-muted text-uppercase">Your Age <span class="text-danger">*</span></label>
+                        <input type="number" name="parent_age" id="parentAge" class="form-control border-0 bg-white shadow-sm py-2" min="18" max="70" placeholder="Enter your age" required oninput="validateAge()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label extra-small fw-bold text-muted text-uppercase">Spouse Age <small class="text-lowercase fw-normal">(if married)</small></label>
+                        <input type="number" name="spouse_age" id="spouseAge" class="form-control border-0 bg-white shadow-sm py-2" min="18" max="70" placeholder="Enter spouse age" oninput="validateAge()">
+                    </div>
+                </div>
+
+                <!-- Age Validation Result -->
+                <div id="ageError" class="alert alert-danger py-2 mt-3 mb-0 border-0 rounded-3 small" style="display:none">
+                    <i class="fas fa-times-circle me-2"></i><span id="ageErrorText"></span>
+                </div>
+                <div id="ageSuccess" class="alert alert-success py-2 mt-3 mb-0 border-0 rounded-3 small" style="display:none">
+                    <i class="fas fa-check-circle me-2"></i><span id="ageSuccessText"></span>
+                </div>
+            </div>
+
+            <!-- Basic Info -->
+            <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-info-circle me-2"></i>Personal Information</h6>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Occupation <span class="text-danger">*</span></label>
+                    <input type="text" name="occupation" class="form-control border-0 bg-light py-2" placeholder="e.g. Teacher, Engineer, Doctor" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Annual Family Income <span class="text-danger">*</span></label>
+                    <input type="text" name="income" class="form-control border-0 bg-light py-2" placeholder="e.g. 5,00,000 per year" required>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Family Size <span class="text-danger">*</span></label>
+                    <input type="number" name="family_size" class="form-control border-0 bg-light py-2" min="1" max="20" placeholder="Total number of members in family" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Why do you want to adopt? <span class="text-danger">*</span></label>
+                    <textarea name="reason" class="form-control border-0 bg-light py-2" rows="4" placeholder="Please explain in detail..." required></textarea>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <h6 class="fw-bold mb-3 text-primary border-top pt-4"><i class="fas fa-file-upload me-2"></i>Upload Documents</h6>
+            <p class="small text-muted mb-4">Please upload clear scanned copies of the following documents (PDF, JPG, PNG).</p>
+            
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">ID Proof <small class="text-lowercase fw-normal">(Aadhaar/Passport)</small></label>
+                    <input type="file" name="id_proof" class="form-control border-0 bg-light" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Income Proof <small class="text-lowercase fw-normal">(Salary Slip/ITR)</small></label>
+                    <input type="file" name="income_proof" class="form-control border-0 bg-light" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Marriage Certificate</label>
+                    <input type="file" name="marriage_cert" class="form-control border-0 bg-light" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Medical Certificate</label>
+                    <input type="file" name="medical_cert" class="form-control border-0 bg-light" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Police Verification</label>
+                    <input type="file" name="police_verification" class="form-control border-0 bg-light" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-lg hover-lift" id="submitBtn">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Application
+                </button>
+                <div class="text-center mt-3">
+                    <small class="text-muted"><i class="fas fa-shield-alt me-1"></i> By submitting you confirm all information is accurate and true.</small>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+var CHILD_AGE = {{ child.age }};
+
+function validateAge() {
+    var parentAge = parseInt(document.getElementById('parentAge').value) || 0;
+    var spouseAge = parseInt(document.getElementById('spouseAge').value) || 0;
+    var errorDiv = document.getElementById('ageError');
+    var errorText = document.getElementById('ageErrorText');
+    var successDiv = document.getElementById('ageSuccess');
+    var successText = document.getElementById('ageSuccessText');
+    var submitBtn = document.getElementById('submitBtn');
+
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    if (parentAge === 0) return;
+
+    var error = null;
+
+    if (parentAge < 25) {
+        error = 'You must be minimum 25 years old as per CARA Guidelines 2022. Your age: ' + parentAge + ' years.';
+    } else if (CHILD_AGE <= 2 && parentAge > 45) {
+        error = 'For child aged 0-2 years, maximum parent age is 45 years as per CARA Guidelines 2022. Your age ' + parentAge + ' exceeds the limit.';
+    } else if (CHILD_AGE <= 8 && parentAge > 50) {
+        error = 'For child aged 2-8 years, maximum parent age is 50 years as per CARA Guidelines 2022. Your age ' + parentAge + ' exceeds the limit.';
+    } else if (CHILD_AGE <= 18 && parentAge > 55) {
+        error = 'For child aged 8-18 years, maximum parent age is 55 years as per CARA Guidelines 2022. Your age ' + parentAge + ' exceeds the limit.';
+    } else if ((parentAge - CHILD_AGE) < 25) {
+        error = 'Minimum 25 years age gap required between parent and child as per CARA Guidelines. Current gap: ' + (parentAge - CHILD_AGE) + ' years. Required: 25 years.';
+    } else if (spouseAge > 0 && (parentAge + spouseAge) > 110) {
+        error = 'Maximum combined age of couple is 110 years as per CARA Guidelines. Combined age: ' + (parentAge + spouseAge) + ' years.';
+    } else if (spouseAge > 0 && spouseAge < 21) {
+        error = 'Spouse must be minimum 21 years old.';
+    }
+
+    if (error) {
+        errorText.textContent = error;
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50');
+    } else {
+        var ageGap = parentAge - CHILD_AGE;
+        var msg = 'Age validation passed! ✅ Your age: ' + parentAge + ' years. Age gap with child: ' + ageGap + ' years.';
+        if (spouseAge > 0) {
+            msg += ' Combined age: ' + (parentAge + spouseAge) + ' years.';
+        }
+        successText.textContent = msg;
+        successDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50');
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,71 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(252, 228, 236, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (standing) -->
+  <path d="M85 170 L85 205 Q85 210 90 210 L100 210" fill="none" stroke="#d4935e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M115 170 L115 205 Q115 210 110 210 L100 210" fill="none" stroke="#d4935e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- CLOTHES (Pink frock) -->
+  <path d="M70 120 Q100 130 130 120 L145 180 Q100 190 55 180 Z" fill="#e91e8c"/>
+  <path d="M75 120 Q100 140 125 120 Z" fill="#c2185b"/>
+  <!-- Flower on frock -->
+  <circle cx="100" cy="155" r="8" fill="#f48fb1"/>
+  <circle cx="100" cy="155" r="3" fill="#ffff00"/>
+  <circle cx="93" cy="150" r="4" fill="#ffc107"/>
+  <circle cx="107" cy="150" r="4" fill="#ffc107"/>
+  <circle cx="95" cy="160" r="4" fill="#ffc107"/>
+  <circle cx="105" cy="160" r="4" fill="#ffc107"/>
+  <!-- NECK -->
+  <rect x="94" y="112" width="12" height="15" fill="#c07a45"/>
+  <!-- ARMS -->
+  <!-- Left Arm waving -->
+  <path d="M68 125 Q40 110 45 85" fill="none" stroke="#d4935e" stroke-width="10" stroke-linecap="round"/>
+  <!-- Right Arm holding doll -->
+  <path d="M132 125 Q145 145 125 160" fill="none" stroke="#d4935e" stroke-width="10" stroke-linecap="round"/>
+  <!-- Sleeves -->
+  <path d="M62 120 L48 135 L62 140 Z" fill="#e91e8c"/>
+  <path d="M138 120 L152 135 L138 140 Z" fill="#e91e8c"/>
+  <!-- HANDS -->
+  <circle cx="45" cy="85" r="6" fill="#d4935e"/>
+  <circle cx="125" cy="160" r="6" fill="#d4935e"/>
+  <!-- DOLL -->
+  <circle cx="115" cy="150" r="8" fill="#f4c07e"/>
+  <path d="M108 158 Q115 165 122 158 L125 170 Q115 175 105 170 Z" fill="#2196f3"/>
+  <!-- HEAD -->
+  <circle cx="100" cy="82" r="38" fill="#d4935e"/>
+  <!-- EARS -->
+  <circle cx="62" cy="85" r="10" fill="#d4935e"/>
+  <circle cx="138" cy="85" r="10" fill="#d4935e"/>
+  <!-- HAIR (Pigtails) -->
+  <path d="M62 82 Q65 40 100 38 Q135 40 138 82 Q120 45 100 45 Q80 45 62 82" fill="#1a1a1a"/>
+  <!-- Bangs -->
+  <path d="M65 65 Q80 75 100 65 Q120 75 135 65 Q120 50 100 50 Q80 50 65 65" fill="#1a1a1a"/>
+  <!-- Left Pigtail -->
+  <path d="M55 70 Q30 80 40 110 Q50 90 60 75" fill="#1a1a1a"/>
+  <!-- Right Pigtail -->
+  <path d="M145 70 Q170 80 160 110 Q150 90 140 75" fill="#1a1a1a"/>
+  <!-- Ribbons -->
+  <path d="M55 70 L45 65 L50 75 Z" fill="#d50000"/>
+  <path d="M145 70 L155 65 L150 75 Z" fill="#d50000"/>
+  <!-- EYES -->
+  <circle cx="85" cy="82" r="11" fill="white"/>
+  <circle cx="115" cy="82" r="11" fill="white"/>
+  <circle cx="85" cy="82" r="8" fill="#4e342e"/>
+  <circle cx="115" cy="82" r="8" fill="#4e342e"/>
+  <circle cx="85" cy="82" r="4.5" fill="#1a1a1a"/>
+  <circle cx="115" cy="82" r="4.5" fill="#1a1a1a"/>
+  <circle cx="88" cy="78" r="3" fill="white"/>
+  <circle cx="118" cy="78" r="3" fill="white"/>
+  <!-- Eyelashes -->
+  <path d="M74 80 Q76 72 80 70" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M126 80 Q124 72 120 70" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- EYEBROWS -->
+  <path d="M75 70 Q85 66 93 70" stroke="#4e342e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M107 70 Q115 66 125 70" stroke="#4e342e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="92" r="3" fill="#c07a45"/>
+  <!-- MOUTH -->
+  <path d="M88 100 Q100 110 112 100" stroke="#5d4037" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- CHEEKS (Very chubby) -->
+  <circle cx="73" cy="95" r="11" fill="rgba(255,130,80,0.4)"/>
+  <circle cx="127" cy="95" r="11" fill="rgba(255,130,80,0.4)"/>
+</svg>

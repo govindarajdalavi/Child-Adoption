@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule Hearing - Court{% endblock %}
+
+{% block header_title %}Judicial Hearing Scheduler{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <!-- Header Section -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h4 class="mb-0 fw-bold">Schedule Court Hearing</h4>
+                <p class="text-muted small mb-0">Application Ref: #{{ application.id }}</p>
+            </div>
+            <span class="badge bg-primary text-white px-4 py-2 rounded-pill shadow-sm fs-6"><i class="fas fa-calendar-alt me-2"></i>Court Docket</span>
+        </div>
+    </div>
+
+    <!-- Details Column -->
+    <div class="col-lg-5" data-aos="fade-right">
+        
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-info">
+            <h6 class="fw-bold border-bottom pb-3 mb-3"><i class="fas fa-baby text-info me-2"></i>Subject Child</h6>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Full Name</span>
+                    <span class="fw-bold">{{ application.child.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Age / Gender</span>
+                    <span class="fw-bold">{{ application.child.age }} yrs / {{ application.child.gender }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Orphanage</span>
+                    <span class="fw-bold text-end">{{ application.child.registered_by.organization_name if application.child.registered_by else 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card glass border-0 p-4 shadow-sm border-start border-4 border-success">
+            <h6 class="fw-bold border-bottom pb-3 mb-3"><i class="fas fa-user-friends text-success me-2"></i>Petitioner Parent</h6>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Full Name</span>
+                    <span class="fw-bold">{{ application.parent.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Phone</span>
+                    <span class="fw-bold">{{ application.parent.phone }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Occupation</span>
+                    <span class="fw-bold">{{ application.occupation }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="extra-small text-muted text-uppercase">Income</span>
+                    <span class="fw-bold">{{ application.income }}</span>
+                </div>
+            </div>
+
+            {% if application.admin_notes %}
+            <div class="alert alert-secondary border-0 bg-secondary bg-opacity-10 rounded-3 mt-4 mb-0 small">
+                <i class="fas fa-clipboard-check me-2 text-secondary"></i>
+                <strong>District Admin Notes:</strong> {{ application.admin_notes }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Form Column -->
+    <div class="col-lg-7" data-aos="fade-left">
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-warning h-100">
+            <h5 class="fw-bold mb-4 text-warning-emphasis"><i class="fas fa-gavel me-2"></i>Schedule Physical Hearing</h5>
+            
+            <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 small shadow-sm">
+                <i class="fas fa-exclamation-triangle me-2 text-warning-emphasis"></i>
+                <strong>Important Legal Notice:</strong> All parties must appear physically in court on the scheduled date. Failure to appear may result in case dismissal or severe delays.
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Hearing Date <span class="text-danger">*</span></label>
+                    <input type="date" name="hearing_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Hearing Time <span class="text-danger">*</span></label>
+                    <input type="time" name="hearing_time" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Venue / Court Name <span class="text-danger">*</span></label>
+                    <input type="text" name="hearing_venue" class="form-control border-0 bg-light rounded-3 py-2" value="{{ current_user.organization_name }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Room Number <span class="text-danger">*</span></label>
+                    <input type="text" name="hearing_room" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Room No. 3" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Presiding Judge Name <span class="text-danger">*</span></label>
+                    <input type="text" name="judge_name" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Hon. Justice Prakash M. Kulkarni" required>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill shadow-lg fw-bold text-dark hover-lift">
+                        <i class="fas fa-paper-plane me-2"></i> Schedule Hearing & Notify Parent
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

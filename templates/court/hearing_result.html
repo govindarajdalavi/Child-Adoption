@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Hearing Result - Court{% endblock %}
+
+{% block header_title %}Update Hearing Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8" data-aos="fade-up">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0 fw-bold">Update Hearing Result</h5>
+            <span class="badge bg-primary px-3 py-2 rounded-pill shadow-sm">Application Ref: #{{ application.id }}</span>
+        </div>
+
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-info">
+            <div class="row g-3">
+                <div class="col-sm-3 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Child</p>
+                    <h6 class="fw-bold mb-0 text-primary">{{ application.child.name }}</h6>
+                </div>
+                <div class="col-sm-3 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Parent</p>
+                    <h6 class="fw-bold mb-0">{{ application.parent.name }}</h6>
+                </div>
+                <div class="col-sm-3 border-end">
+                    <p class="extra-small text-muted text-uppercase mb-1">Hearing Date</p>
+                    <h6 class="fw-bold mb-0">{{ application.hearing_date }}</h6>
+                </div>
+                <div class="col-sm-3">
+                    <p class="extra-small text-muted text-uppercase mb-1">Presiding Judge</p>
+                    <h6 class="fw-bold mb-0 text-truncate" title="{{ application.judge_name }}">{{ application.judge_name }}</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning border-warning bg-warning bg-opacity-10 rounded-4 mb-4 shadow-sm">
+            <i class="fas fa-exclamation-triangle me-2 text-warning-emphasis"></i>
+            <strong>Important Legal Notice:</strong> Physical court order must be formally signed by the presiding judge. You are required to upload a scanned copy of this physical document here. Parents must collect the original certificate from the court office in person.
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-success">
+            <h5 class="fw-bold mb-4 text-success"><i class="fas fa-file-signature me-2"></i>Official Order Submission</h5>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Court Order Number <span class="text-danger">*</span></label>
+                    <input type="text" name="order_number" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. DCF/HBL/2026/001" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Order Date <span class="text-danger">*</span></label>
+                    <input type="date" name="order_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Upload Scanned Physical Court Order <span class="text-danger">*</span></label>
+                    
+                    <div class="position-relative">
+                        <input type="file" name="scanned_order" class="form-control border-0 bg-light rounded-3 py-3" accept=".pdf,.jpg,.jpeg,.png" required style="padding-left: 50px;">
+                        <i class="fas fa-cloud-upload-alt text-muted position-absolute" style="left: 20px; top: 18px; font-size: 1.2rem;"></i>
+                    </div>
+                    <small class="text-muted d-block mt-2 fst-italic">Upload a clear, legible scanned PDF or image copy of the judge-signed physical order.</small>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 d-block">Final Hearing Result <span class="text-danger">*</span></label>
+                    <select name="result" class="form-select border-0 bg-light rounded-3 py-3 fw-bold" required>
+                        <option value="approved" class="text-success">✅ Adoption Approved by Court (Decree Granted)</option>
+                        <option value="rejected" class="text-danger">❌ Adoption Rejected by Court (Decree Denied)</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-success w-100 py-3 rounded-pill shadow-lg fw-bold hover-lift">
+                        <i class="fas fa-gavel me-2"></i> Submit Court Order & Finalize
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

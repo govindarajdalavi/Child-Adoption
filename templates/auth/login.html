@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - DDCAPMS{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        overflow: hidden;
+    }
+    
+    #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        z-index: -1;
+    }
+    
+    #particles-js::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 70% 30%, rgba(99, 102, 241, 0.15), transparent 50%);
+        pointer-events: none;
+    }
+
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .login-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        z-index: 10;
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 3rem;
+        width: 100%;
+        color: white;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+        position: relative;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
+        padding: 0.8rem 1.2rem;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-color);
+        color: white;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    /* ════ CHILD CHARACTER ANIMATIONS ════ */
+    .child-viewport {
+        position: absolute;
+        top: 150px; 
+        left: -130px;
+        width: 130px;
+        height: 160px; /* Full height visible */
+        z-index: 5; /* Behind the login card */
+        overflow: hidden;
+    }
+
+    .child-riser {
+        width: 100%;
+        height: 100%;
+        transform: translateX(130px);
+        animation: peekOutLeft 1s ease-out 1s forwards; /* Slides out from right to left */
+    }
+
+    .child-bouncer {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .head-tilter {
+        width: 100%;
+        height: 100%;
+    }
+
+    .arm-waver {
+        width: 100%;
+        height: 100%;
+    }
+
+    .child-img {
+        width: 160px;
+        height: 160px; /* 160x160 total size */
+        object-fit: cover;
+        object-position: top;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .speech-bubble {
+        position: absolute;
+        top: 70px;
+        left: -160px; /* Positioned relative to the child */
+        background: white;
+        border-radius: 20px;
+        padding: 12px 25px;
+        color: #1e293b;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        opacity: 0;
+        transform: scale(0);
+        transform-origin: bottom right;
+        animation: bubblePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2s forwards; /* Pops up after 2s */
+        z-index: 15; /* In front of everything */
+        white-space: nowrap;
+        pointer-events: none; /* Let clicks pass through to child if overlapped */
+    }
+
+    .speech-bubble::after {
+        content: '';
+        position: absolute;
+        right: 30px;
+        bottom: -12px;
+        border-width: 12px 15px 0 0;
+        border-style: solid;
+        border-color: white transparent transparent transparent;
+    }
+
+    @keyframes peekOutLeft {
+        0% { transform: translateX(130px); }
+        100% { transform: translateX(0); }
+    }
+
+    @keyframes bounceJump {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-30px); }
+    }
+
+    @keyframes headTilt {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    @keyframes waveHand {
+        0%, 100% { transform: rotate(-20deg); }
+        50% { transform: rotate(20deg); }
+    }
+
+    @keyframes bubblePop {
+        0% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .sample-credentials {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sample-credentials h7 {
+        color: var(--accent-color);
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="particles-js"></div>
+
+<div class="login-container">
+    <div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
+        <a href="/" class="btn btn-white glass text-white shadow-sm rounded-pill px-4">
+            <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+    </div>
+    <div class="login-wrapper">
+        <!-- Speech Bubble (z-index: 15) -->
+        <div class="speech-bubble" id="speechBubble">Hi! 👋 Welcome!</div>
+
+        <!-- Child Character (z-index: 5) -->
+        <div class="child-viewport">
+            <div class="child-riser">
+                <div class="child-bouncer" id="childBouncer">
+                    <div class="head-tilter">
+                        <div class="arm-waver">
+                            <img src="{{ url_for('static', filename='images/child.png') }}" class="child-img" alt="Welcome Child">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Card (z-index: 10) -->
+        <div class="login-card" data-aos="zoom-in">
+            <div class="text-center mb-5">
+                <div class="mb-3 d-inline-block p-3 rounded-circle bg-primary bg-opacity-10">
+                    <i class="fas fa-child-reaching fa-3x text-primary"></i>
+                </div>
+                <h2 class="fw-bold mb-1">Welcome Back</h2>
+                <p class="text-white-50">Dharwad District Child Adoption System</p>
+            </div>
+
+            <form method="POST" class="needs-validation" novalidate>
+                <div class="mb-4">
+                    <label class="form-label text-white-50 small">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-white-50">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" name="email" class="form-control border-start-0" placeholder="admin@dharwad.gov.in" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-white-50 small">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-white-50">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" name="password" class="form-control border-start-0" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label small text-white-50" for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="small text-accent text-decoration-none">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login btn-primary w-100 mb-4">
+                    SIGN IN <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <p class="text-center small text-white-50">
+                Don't have an account? 
+                <a href="{{ url_for('auth.register') }}" class="text-white fw-bold text-decoration-none ms-1">Register Now</a>
+            </p>
+
+            <div class="sample-credentials mt-4">
+                <h7><i class="fas fa-key me-2"></i>Sample Credentials</h7>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="p-2 border border-white border-opacity-10 rounded">
+                            <div class="text-white-50 extra-small">ADMIN</div>
+                            <div class="extra-small fw-bold">admin@dharwad.gov.in</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border border-white border-opacity-10 rounded">
+                            <div class="text-white-50 extra-small">PARENT</div>
+                            <div class="extra-small fw-bold">veena@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 text-center text-white-50" style="font-size: 0.7rem;">
+                    Password: <strong>admin123</strong> / <strong>parent123</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    // Particle background
+    particlesJS('particles-js', {
+        "particles": {
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": false },
+            "size": { "value": 3, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+            "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+            "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+    });
+
+    // Child Click Animation Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const childBouncer = document.getElementById('childBouncer');
+        const speechBubble = document.getElementById('speechBubble');
+        let isBouncing = false;
+
+        childBouncer.addEventListener('click', () => {
+            if (isBouncing) return;
+            isBouncing = true;
+            
+            // Trigger bounce animation
+            childBouncer.style.animation = 'none';
+            childBouncer.offsetHeight; // trigger reflow
+            childBouncer.style.animation = 'bounceJump 0.5s ease';
+            
+            // Change speech bubble text
+            speechBubble.innerHTML = 'Fill the form! 😊';
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                speechBubble.innerHTML = 'Hi! 👋 Welcome!';
+                childBouncer.style.animation = '';
+                isBouncing = false;
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

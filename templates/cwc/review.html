@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Child Review - CWC{% endblock %}
+
+{% block header_title %}CWC Investigation Order{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <!-- Header Section -->
+    <div class="col-12" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h4 class="mb-0 fw-bold">CWC Review — {{ child.name }}</h4>
+                <p class="text-muted small mb-0">Child Welfare Committee Assessment</p>
+            </div>
+            <span class="badge bg-warning text-dark px-4 py-2 rounded-pill shadow-sm fs-6">JJ Act 2015 Section 36</span>
+        </div>
+    </div>
+
+    <!-- Child Details Column -->
+    <div class="col-lg-5" data-aos="fade-right">
+        <div class="card glass border-0 p-4 mb-4 shadow-sm border-start border-4 border-info h-100">
+            <h5 class="fw-bold border-bottom pb-3 mb-4"><i class="fas fa-baby text-info me-2"></i>Child Dossier</h5>
+            
+            <div class="text-center mb-4">
+                <img src="/static/uploads/{{ child.photo }}" onerror="this.src='/static/images/default_child.png'"
+                     class="rounded-circle shadow" style="width:120px;height:120px;object-fit:cover;border:4px solid white">
+            </div>
+
+            <div class="d-flex flex-column gap-3">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="extra-small text-muted text-uppercase mb-1">Name</p>
+                        <h6 class="fw-bold mb-0">{{ child.name }}</h6>
+                    </div>
+                    <div class="col-6">
+                        <p class="extra-small text-muted text-uppercase mb-1">Age / Gender</p>
+                        <h6 class="fw-bold mb-0">{{ child.age }} yrs / {{ child.gender }}</h6>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <p class="extra-small text-muted text-uppercase mb-1">Date of Birth</p>
+                        <h6 class="fw-bold mb-0">{{ child.date_of_birth or 'Unknown' }}</h6>
+                    </div>
+                    <div class="col-6">
+                        <p class="extra-small text-muted text-uppercase mb-1">Orphanage</p>
+                        <h6 class="fw-bold mb-0 text-truncate" title="{{ child.registered_by.organization_name if child.registered_by else 'N/A' }}">
+                            {{ child.registered_by.organization_name if child.registered_by else 'N/A' }}
+                        </h6>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">How Child Came</p>
+                    <h6 class="fw-bold mb-0">{{ child.how_child_came|title }}</h6>
+                </div>
+                
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">Health Status</p>
+                    <h6 class="fw-bold mb-0"><i class="fas fa-notes-medical text-danger me-1"></i> {{ child.health_status }}</h6>
+                </div>
+                
+                <div>
+                    <p class="extra-small text-muted text-uppercase mb-1">Background Story</p>
+                    <p class="small mb-0 text-muted bg-light p-2 rounded-3 border-0">{{ child.background }}</p>
+                </div>
+            </div>
+
+            {% if child.documents %}
+            <div class="mt-4 pt-3 border-top">
+                <p class="extra-small text-muted text-uppercase fw-bold mb-3">Official Documents</p>
+                <div class="d-flex flex-column gap-2">
+                    {% for doc in child.documents %}
+                    <a href="/static/uploads/{{ doc.file_path }}" target="_blank" class="btn btn-light text-start border-0 shadow-sm w-100 hover-lift d-flex align-items-center">
+                        <div class="bg-white text-primary rounded-circle shadow-sm p-2 me-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <span class="fw-bold small">{{ doc.doc_type.replace('_',' ').title() }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Form Column -->
+    <div class="col-lg-7" data-aos="fade-left">
+        <form method="POST" class="card glass border-0 p-4 p-md-5 shadow-sm border-start border-4 border-warning h-100">
+            <h5 class="fw-bold mb-4 text-warning-emphasis"><i class="fas fa-gavel me-2"></i>Official CWC Order</h5>
+            
+            <div class="alert alert-warning border-warning bg-white bg-opacity-10 rounded-4 mb-4 small shadow-sm text-white">
+                <i class="fas fa-balance-scale me-2 text-warning"></i>
+                <strong class="text-warning">Legal Basis: JJ Act 2015 Section 36</strong> — CWC must independently verify the child is genuinely abandoned or surrendered before legally declaring them free for adoption.
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">CWC Order Number <span class="text-danger">*</span></label>
+                    <input type="text" name="order_number" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. CWC/DHW/2026/001" required>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Order Date <span class="text-danger">*</span></label>
+                    <input type="date" name="order_date" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Investigation Notes <span class="text-danger">*</span></label>
+                    <textarea name="investigation_notes" class="form-control border-0 bg-light rounded-3 py-2" rows="4" placeholder="Detailed investigation findings, witness statements, etc..." required></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase mb-3 d-block">Mandatory Verifications</label>
+                    
+                    <div class="bg-light bg-opacity-50 border rounded-4 p-3 d-flex flex-column gap-3">
+                        <div class="form-check form-switch d-flex align-items-center gap-3">
+                            <input type="checkbox" name="background_verified" class="form-check-input mt-0" id="bgVerified" value="1" style="width: 40px; height: 20px; cursor: pointer;">
+                            <label class="form-check-label mb-0 fw-bold" for="bgVerified" style="cursor: pointer;">
+                                Background story verified via independent enquiry
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch d-flex align-items-center gap-3">
+                            <input type="checkbox" name="medical_examined" class="form-check-input mt-0" id="medExam" value="1" style="width: 40px; height: 20px; cursor: pointer;">
+                            <label class="form-check-label mb-0 fw-bold" for="medExam" style="cursor: pointer;">
+                                Independent medical examination completed
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase border-bottom pb-2 d-block">Final CWC Decision <span class="text-danger">*</span></label>
+                    <select name="decision" class="form-select border-0 bg-light rounded-3 py-3 fw-bold" required>
+                        <option value="legally_free" class="text-success">✅ Declare Legally Free for Adoption</option>
+                        <option value="rejected" class="text-danger">❌ Reject Application — Cannot be adopted</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill shadow-lg fw-bold text-dark hover-lift">
+                        <i class="fas fa-stamp me-2"></i> Issue Official CWC Order
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

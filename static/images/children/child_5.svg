@@ -1,0 +1,55 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(255, 235, 238, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (Running pose) -->
+  <path d="M75 160 Q70 190 90 200" fill="none" stroke="#b5621e" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M125 160 Q130 180 140 170" fill="none" stroke="#b5621e" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M65 170 Q100 180 135 160 L125 175 Q100 185 75 180 Z" fill="#424242"/> <!-- Shorts -->
+  <!-- BODY (Red t-shirt) -->
+  <path d="M65 120 Q100 130 135 120 L135 165 Q100 175 65 165 Z" fill="#c62828"/>
+  <path d="M85 120 Q100 135 115 120 Z" fill="#b71c1c"/> <!-- Collar -->
+  <!-- NECK -->
+  <rect x="92" y="110" width="16" height="20" fill="#9c4d15"/>
+  <!-- ARMS (Running pose) -->
+  <path d="M65 125 Q40 140 50 160" fill="none" stroke="#b5621e" stroke-width="12" stroke-linecap="round"/>
+  <path d="M135 125 Q160 140 150 160" fill="none" stroke="#b5621e" stroke-width="12" stroke-linecap="round"/>
+  <path d="M60 120 L48 140 L62 145 Z" fill="#c62828"/>
+  <path d="M140 120 L152 140 L138 145 Z" fill="#c62828"/>
+  <!-- HANDS -->
+  <circle cx="50" cy="160" r="7" fill="#b5621e"/>
+  <circle cx="150" cy="160" r="7" fill="#b5621e"/>
+  <!-- FOOTBALL -->
+  <circle cx="150" cy="180" r="15" fill="#ffffff"/>
+  <path d="M145 175 L155 175 L158 182 L150 188 L142 182 Z" fill="#212121"/>
+  <path d="M150 188 L150 195" stroke="#212121" stroke-width="2"/>
+  <path d="M145 175 L138 172" stroke="#212121" stroke-width="2"/>
+  <path d="M155 175 L162 172" stroke="#212121" stroke-width="2"/>
+  <!-- HEAD -->
+  <circle cx="100" cy="85" r="42" fill="#b5621e"/>
+  <!-- EARS -->
+  <circle cx="58" cy="88" r="11" fill="#b5621e"/>
+  <circle cx="142" cy="88" r="11" fill="#b5621e"/>
+  <!-- HAIR (Spiky) -->
+  <path d="M58 80 L65 50 L75 60 L85 40 L95 55 L105 35 L115 55 L125 40 L135 60 L142 80 Z" fill="#1a1a1a"/>
+  <!-- EYES -->
+  <circle cx="85" cy="85" r="10" fill="white"/>
+  <circle cx="115" cy="85" r="10" fill="white"/>
+  <circle cx="85" cy="85" r="7" fill="#4e342e"/>
+  <circle cx="115" cy="85" r="7" fill="#4e342e"/>
+  <circle cx="85" cy="85" r="4" fill="#1a1a1a"/>
+  <circle cx="115" cy="85" r="4" fill="#1a1a1a"/>
+  <!-- Eye shine -->
+  <circle cx="88" cy="82" r="2.5" fill="white"/>
+  <circle cx="118" cy="82" r="2.5" fill="white"/>
+  <!-- EYEBROWS -->
+  <path d="M75 73 Q85 68 93 75" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M107 75 Q115 68 125 73" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="95" r="4" fill="#9c4d15"/>
+  <!-- MOUTH (Big smile showing teeth) -->
+  <path d="M85 105 Q100 120 115 105 Z" fill="#ffffff" stroke="#5d4037" stroke-width="2" stroke-linecap="round"/>
+  <path d="M85 105 Q100 110 115 105" stroke="#5d4037" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- CHEEKS -->
+  <circle cx="73" cy="97" r="9" fill="rgba(255,100,50,0.3)"/>
+  <circle cx="127" cy="97" r="9" fill="rgba(255,100,50,0.3)"/>
+</svg>

@@ -1,0 +1,60 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="200" height="220">
+  <circle cx="100" cy="120" r="90" fill="rgba(255, 249, 196, 0.6)"/>
+  <ellipse cx="100" cy="215" rx="45" ry="7" fill="rgba(0,0,0,0.1)"/>
+  <!-- LEGS (Toddler sitting) -->
+  <path d="M80 180 Q70 205 90 205" fill="none" stroke="#f4c07e" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M120 180 Q130 205 110 205" fill="none" stroke="#f4c07e" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- CLOTHES (Yellow frock) -->
+  <path d="M75 130 Q100 140 125 130 L140 185 Q100 195 60 185 Z" fill="#f9a825"/>
+  <path d="M80 130 Q100 150 120 130 Z" fill="#f57f17"/>
+  <!-- NECK -->
+  <rect x="94" y="115" width="12" height="15" fill="#e0a35e"/>
+  <!-- ARMS -->
+  <path d="M70 135 Q50 155 70 170" fill="none" stroke="#f4c07e" stroke-width="14" stroke-linecap="round"/>
+  <path d="M130 135 Q150 155 130 170" fill="none" stroke="#f4c07e" stroke-width="14" stroke-linecap="round"/>
+  <path d="M65 130 L55 145 L70 150 Z" fill="#f9a825"/>
+  <path d="M135 130 L145 145 L130 150 Z" fill="#f9a825"/>
+  <!-- TOY -->
+  <rect x="90" y="175" width="20" height="20" fill="#4caf50" rx="2"/>
+  <rect x="85" y="160" width="15" height="15" fill="#f44336" rx="2"/>
+  <rect x="105" y="165" width="15" height="15" fill="#2196f3" rx="2"/>
+  <!-- HANDS -->
+  <circle cx="70" cy="170" r="8" fill="#f4c07e"/>
+  <circle cx="130" cy="170" r="8" fill="#f4c07e"/>
+  <!-- BIG HEAD (Toddler proportions) -->
+  <circle cx="100" cy="85" r="48" fill="#f4c07e"/>
+  <!-- EARS -->
+  <circle cx="52" cy="90" r="10" fill="#f4c07e"/>
+  <circle cx="148" cy="90" r="10" fill="#f4c07e"/>
+  <!-- HAIR (Short curly) -->
+  <circle cx="100" cy="40" r="18" fill="#1a1a1a"/>
+  <circle cx="80" cy="45" r="16" fill="#1a1a1a"/>
+  <circle cx="120" cy="45" r="16" fill="#1a1a1a"/>
+  <circle cx="60" cy="55" r="14" fill="#1a1a1a"/>
+  <circle cx="140" cy="55" r="14" fill="#1a1a1a"/>
+  <circle cx="55" cy="70" r="12" fill="#1a1a1a"/>
+  <circle cx="145" cy="70" r="12" fill="#1a1a1a"/>
+  <!-- BOW -->
+  <path d="M120 40 L135 30 L130 45 Z" fill="#e91e63"/>
+  <path d="M120 40 L105 30 L110 45 Z" fill="#e91e63"/>
+  <circle cx="120" cy="40" r="4" fill="#ffeb3b"/>
+  <!-- EYES (Big) -->
+  <circle cx="82" cy="88" r="13" fill="white"/>
+  <circle cx="118" cy="88" r="13" fill="white"/>
+  <circle cx="82" cy="88" r="9" fill="#4e342e"/>
+  <circle cx="118" cy="88" r="9" fill="#4e342e"/>
+  <circle cx="82" cy="88" r="5" fill="#1a1a1a"/>
+  <circle cx="118" cy="88" r="5" fill="#1a1a1a"/>
+  <circle cx="85" cy="84" r="3.5" fill="white"/>
+  <circle cx="121" cy="84" r="3.5" fill="white"/>
+  <!-- EYEBROWS -->
+  <path d="M72 74 Q82 70 90 74" stroke="#4e342e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M110 74 Q118 70 128 74" stroke="#4e342e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <circle cx="100" cy="98" r="3.5" fill="#e0a35e"/>
+  <!-- MOUTH (Laughing) -->
+  <path d="M85 108 Q100 125 115 108 Z" fill="#e91e63" stroke="#5d4037" stroke-width="2" stroke-linecap="round"/>
+  <!-- CHEEKS (Very chubby) -->
+  <circle cx="70" cy="100" r="12" fill="rgba(255,130,80,0.4)"/>
+  <circle cx="130" cy="100" r="12" fill="rgba(255,130,80,0.4)"/>
+</svg>

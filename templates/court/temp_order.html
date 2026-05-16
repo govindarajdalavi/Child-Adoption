@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Issue Temporary Order - Court Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card glass">
+            <div class="card-body p-4">
+                <h4 class="mb-4"><i class="fas fa-balance-scale"></i> Issue Temporary Foster Care Order</h4>
+                
+                <div class="alert alert-warning">
+                    <strong>⚖️ COURT TEMPORARY ORDER:</strong>
+                    This order gives temporary custody to prospective parent for foster care period only. Child still legally belongs to orphanage. Final adoption requires separate final hearing and final court order.
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Temporary Order Number</label>
+                            <input type="text" name="temp_order_number" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Order Date</label>
+                            <input type="date" name="temp_order_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Presiding Judge</label>
+                            <input type="text" name="temp_order_judge" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Conditions / Notes</label>
+                            <textarea name="temp_order_conditions" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Scanned Copy (PDF/JPG)</label>
+                            <input type="file" name="temp_order_scan" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary px-4"><i class="fas fa-check-circle"></i> Issue Temporary Order</button>
+                        <a href="{{ url_for('court.dashboard') }}" class="btn btn-secondary px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

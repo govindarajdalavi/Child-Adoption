@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Child - Orphanage{% endblock %}
+
+{% block header_title %}New Child Registration{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8" data-aos="fade-up">
+        <div class="card glass border-0 p-4 p-md-5 shadow-sm">
+            <div class="alert alert-info border-info bg-info bg-opacity-10 rounded-4 mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                <small>After registration, submit to CWC for verification. CWC will declare child legally free under <strong>JJ Act 2015 Section 36</strong>.</small>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="row g-4">
+                <div class="col-12 text-center mb-2">
+                    <div class="position-relative d-inline-block">
+                        <img id="photoPreview" src="/static/images/default_child.png" class="rounded-circle shadow-sm" style="width:120px;height:120px;object-fit:cover;border:4px solid white;">
+                        <label for="photoInput" class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 mb-1 me-1 shadow" style="width:36px;height:36px;padding:6px;">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" name="photo" id="photoInput" class="d-none" accept=".jpg,.jpeg,.png" onchange="previewPhoto(this)">
+                    </div>
+                    <p class="extra-small text-muted mt-2">Tap to upload Child Photo</p>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Child's Full Name <span class="text-danger">*</span></label>
+                    <input type="text" name="name" class="form-control border-0 bg-light rounded-3 py-2" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Age <span class="text-danger">*</span></label>
+                    <input type="number" name="age" class="form-control border-0 bg-light rounded-3 py-2" min="0" max="18" required>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Gender <span class="text-danger">*</span></label>
+                    <select name="gender" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Date of Birth</label>
+                    <input type="date" name="date_of_birth" class="form-control border-0 bg-light rounded-3 py-2">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">How Child Came</label>
+                    <select name="how_child_came" class="form-select border-0 bg-light rounded-3 py-2">
+                        <option value="surrendered">Surrendered by Parents</option>
+                        <option value="abandoned">Found Abandoned</option>
+                        <option value="orphaned">Both Parents Deceased</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Health Status</label>
+                    <input type="text" name="health_status" class="form-control border-0 bg-light rounded-3 py-2" placeholder="e.g. Healthy, all vaccinations complete">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Background / History</label>
+                    <textarea name="background" class="form-control border-0 bg-light rounded-3 py-2" rows="4" placeholder="Briefly describe how the child came to the orphanage..."></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3"><i class="fas fa-file-upload text-primary me-2"></i>Upload Official Documents</h6>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted">Surrender/Abandonment Cert</label>
+                    <input type="file" name="surrender_cert" class="form-control form-control-sm border-0 bg-light rounded-3" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted">Birth Certificate</label>
+                    <input type="file" name="birth_cert" class="form-control form-control-sm border-0 bg-light rounded-3" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold text-muted">Medical Report</label>
+                    <input type="file" name="medical_report" class="form-control form-control-sm border-0 bg-light rounded-3" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-sm fw-bold">
+                        <i class="fas fa-save me-2"></i> Register Child
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) { document.getElementById('photoPreview').src = e.target.result; }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

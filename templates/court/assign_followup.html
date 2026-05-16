@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Assign Follow-up - Court{% endblock %}
+
+{% block header_title %}Schedule Field Visit{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6" data-aos="zoom-in">
+        <div class="card glass border-0 p-4 p-md-5 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Visit {{ application.followups|length + 1 }} of 3</h5>
+                <span class="badge bg-info px-3 py-2 rounded-pill shadow-sm">CARA Regulation 13</span>
+            </div>
+            
+            <div class="card bg-light border-0 rounded-4 p-3 mb-4 d-flex flex-row align-items-center gap-3">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                    <i class="fas fa-child fa-lg"></i>
+                </div>
+                <div class="w-100">
+                    <div class="d-flex justify-content-between">
+                        <span class="extra-small text-muted text-uppercase">Child / Parent</span>
+                        <span class="extra-small text-muted text-uppercase">Visits Done</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <h6 class="mb-0 fw-bold">{{ application.child.name }} <span class="text-muted fw-normal mx-1">&amp;</span> {{ application.parent.name }}</h6>
+                        <span class="badge bg-secondary">{{ application.followups|length }} / 3</span>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="form-label extra-small fw-bold text-muted text-uppercase">Assign Licensed Social Worker <span class="text-danger">*</span></label>
+                    <select name="social_worker_id" class="form-select border-0 bg-light rounded-3 py-3" required>
+                        <option value="">-- Select Social Worker --</option>
+                        {% for sw in socialworkers %}
+                        <option value="{{ sw.id }}">{{ sw.name }} — {{ sw.organization_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-lg hover-lift">
+                    <i class="fas fa-user-plus me-2"></i> Assign Social Worker for Visit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

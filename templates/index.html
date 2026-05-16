@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% block title %}Welcome - Dharwad District Child Adoption Monitoring System{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Government Portal Theme overrides */
+    body {
+        background-color: #f8fafc;
+        background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%231a237e" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    }
+    
+    .hero-section {
+        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent),
+                    linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+        color: white;
+        padding: 8rem 0;
+        position: relative;
+        overflow: hidden;
+        border-bottom-left-radius: 80px;
+        border-bottom-right-radius: 80px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .gov-emblem-placeholder {
+        width: 80px;
+        height: 100px;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .process-step {
+        text-align: center;
+        padding: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .process-icon {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border: 4px solid #f8fafc;
+        transition: transform 0.3s;
+    }
+
+    .process-step:hover .process-icon {
+        transform: scale(1.1);
+        color: #0d47a1;
+        border-color: #e0e7ff;
+    }
+
+    .process-connector {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        width: 100%;
+        height: 4px;
+        background: #e2e8f0;
+        z-index: -1;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(26, 35, 126, 0.1);
+    }
+
+    .navbar-public {
+        background: rgba(255,255,255,0.95) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        padding: 1rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Public Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-public fixed-top py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-3 fw-bold text-primary" href="#">
+            <div class="bg-primary text-white rounded-3 p-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                <i class="fas fa-child-reaching fs-4"></i>
+            </div>
+            <div>
+                <div class="lh-1 tracking-tight">DDCAPMS</div>
+                <div class="small fw-normal text-muted" style="font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase;">Dharwad Government</div>
+            </div>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-4">
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold text-dark small px-3" href="#cara-guidelines">Process</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link fw-bold text-primary small bg-primary bg-opacity-5 rounded-pill px-3">
+                        <i class="fas fa-phone-alt me-2"></i>Helpline: 1098
+                    </span>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-lg hover-lift">
+                        <i class="fas fa-user-lock me-2"></i> Official Login
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-section" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start" data-aos="fade-right">
+                <div class="d-flex justify-content-center justify-content-lg-start mb-3">
+                    <div class="gov-emblem-placeholder text-center text-white-50 p-2">
+                        <i class="fas fa-landmark fa-3x"></i>
+                    </div>
+                </div>
+                <div class="badge bg-warning text-dark rounded-pill px-3 py-2 fw-bold mb-3 shadow-sm">
+                    <i class="fas fa-shield-alt me-1"></i> Strictly Governed by JJ Act 2015 & CARA 2022
+                </div>
+                <h1 class="display-4 fw-bold mb-4 lh-sm">
+                    District Level Child Adoption<br>
+                    <span class="text-warning">Procedural Monitoring</span> System
+                </h1>
+                <p class="lead mb-5 opacity-75" style="max-width: 600px;">
+                    A transparent, secure, and legally compliant platform dedicated to finding loving homes for orphaned, abandoned, and surrendered children in Dharwad District.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-light text-primary btn-lg rounded-pill px-5 fw-bold shadow">
+                        Register as Parent
+                    </a>
+                    <a href="#cara-guidelines" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                        View Guidelines
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-5 mt-5 mt-lg-0" data-aos="fade-left">
+                <div class="row g-4">
+                    <div class="col-sm-6">
+                        <div class="stat-box h-100">
+                            <i class="fas fa-baby fa-2x mb-3 text-warning"></i>
+                            <h2 class="display-5 fw-bold mb-0 stat-number" data-target="{{ total_children }}">{{ total_children }}</h2>
+                            <p class="small text-uppercase fw-bold opacity-75 mt-2 mb-0">Registered Children</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="stat-box h-100">
+                            <i class="fas fa-house-user fa-2x mb-3 text-info"></i>
+                            <h2 class="display-5 fw-bold mb-0 stat-number" data-target="{{ foster_care }}">{{ foster_care }}</h2>
+                            <p class="small text-uppercase fw-bold opacity-75 mt-2 mb-0">In Foster Care</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="stat-box text-center p-4">
+                            <i class="fas fa-certificate fa-2x mb-3 text-success"></i>
+                            <h2 class="display-4 fw-bold mb-0 text-success stat-number" data-target="{{ total_adoptions }}">{{ total_adoptions }}</h2>
+                            <p class="small text-uppercase fw-bold opacity-75 mt-2 mb-0">Successful Legal Adoptions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CARA Process Timeline -->
+<div class="container py-5 mt-4" id="cara-guidelines">
+    <div class="text-center mb-5" data-aos="fade-up">
+        <h6 class="text-primary fw-bold tracking-widest text-uppercase">Adoption Workflow</h6>
+        <h2 class="fw-bold">Legal Adoption Process</h2>
+        <div class="mx-auto mt-3" style="width: 60px; height: 4px; background: var(--primary-color); border-radius: 2px;"></div>
+    </div>
+
+    <div class="row position-relative">
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="process-step">
+                <div class="process-connector d-none d-lg-block"></div>
+                <div class="process-icon"><i class="fas fa-file-signature"></i></div>
+                <h5 class="fw-bold">1. Registration</h5>
+                <p class="text-muted small">Prospective adoptive parents register and upload identity, income, and medical proofs.</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="process-step">
+                <div class="process-connector d-none d-lg-block"></div>
+                <div class="process-icon"><i class="fas fa-house-chimney-window"></i></div>
+                <h5 class="fw-bold">2. Home Study</h5>
+                <p class="text-muted small">Licensed social worker conducts physical home inspection to verify family suitability.</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="process-step">
+                <div class="process-connector d-none d-lg-block"></div>
+                <div class="process-icon"><i class="fas fa-gavel"></i></div>
+                <h5 class="fw-bold">3. Court Orders</h5>
+                <p class="text-muted small">District Family Court issues Temporary Foster Care Order, followed by Final Adoption Order.</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="process-step">
+                <div class="process-icon bg-success text-white"><i class="fas fa-certificate"></i></div>
+                <h5 class="fw-bold text-success">4. Post-Adoption</h5>
+                <p class="text-muted small">Social worker conducts 3 mandatory follow-up visits over 2 years (Regulation 13).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Authority Features -->
+<div class="bg-white py-5">
+    <div class="container py-4">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5" data-aos="fade-right">
+                <h3 class="fw-bold mb-4">Strict Government Oversight & Privacy Protection</h3>
+                <p class="text-muted mb-4">Our portal is designed exclusively for Dharwad District administrative use, connecting all critical stakeholders in the adoption lifecycle.</p>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="fas fa-check-circle text-success fs-5 mt-1"></i>
+                        <div>
+                            <strong>CWC Validated Orphan Database</strong>
+                            <p class="text-muted small mb-0">Every child is legally declared free for adoption by the Child Welfare Committee before being visible to parents.</p>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="fas fa-check-circle text-success fs-5 mt-1"></i>
+                        <div>
+                            <strong>Real-time Court Integration</strong>
+                            <p class="text-muted small mb-0">Direct workflow integration with the District Family Court to eliminate illegal handovers.</p>
+                        </div>
+                    </li>
+                    <li class="d-flex gap-3">
+                        <i class="fas fa-check-circle text-success fs-5 mt-1"></i>
+                        <div>
+                            <strong>Child Privacy Protocol</strong>
+                            <p class="text-muted small mb-0">Strict prevention of unauthorized photo scraping. Images are protected and displayed securely only to verified parents.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-7" data-aos="fade-left">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="feature-card border-top border-4 border-primary">
+                            <i class="fas fa-user-shield fa-2x text-primary mb-3"></i>
+                            <h6 class="fw-bold">Collector & Admin Oversight</h6>
+                            <p class="small text-muted mb-0">Complete macroscopic view of all district adoption cases with interactive analytics and bottleneck detection.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-md-5">
+                        <div class="feature-card border-top border-4 border-info">
+                            <i class="fas fa-user-md fa-2x text-info mb-3"></i>
+                            <h6 class="fw-bold">Field Social Workers</h6>
+                            <p class="small text-muted mb-0">Dedicated portal for conducting home studies, child consent assessments, and weekly foster care monitoring.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white pt-5 pb-4 mt-auto">
+    <div class="container text-center text-md-start">
+        <div class="row">
+            <div class="col-md-5 mb-4">
+                <h5 class="text-uppercase fw-bold mb-3"><i class="fas fa-landmark me-2"></i>WCD Dharwad</h5>
+                <p class="text-white-50 small">
+                    Department of Women and Child Development<br>
+                    District Administrative Building, Dharwad 580001<br>
+                    Karnataka, India
+                </p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">Important Links</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">CARA Official Website</a></li>
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Juvenile Justice Act 2015</a></li>
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Adoption Regulations 2022</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">Contact Support</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><i class="fas fa-envelope me-2"></i>ddwcd.dharwad@gmail.com</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2"></i>0836-2233445</li>
+                    <li class="mb-2"><i class="fas fa-blender-phone me-2"></i>Childline: 1098</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="mb-4 bg-secondary">
+        <div class="text-center small text-white-50">
+            © 2026 District Administration, Dharwad. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+{% endblock %}

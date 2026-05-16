@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Children - Admin{% endblock %}
+
+{% block header_title %}District Children Registry{% endblock %}
+
+{% block content %}
+<div class="card glass border-0 p-0 overflow-hidden shadow-sm" data-aos="fade-up">
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Children Information</h5>
+        <div class="input-group input-group-sm" style="width: 250px;">
+            <input type="text" id="tableSearch" class="form-control rounded-start-pill border-0 bg-light" placeholder="Search children...">
+            <span class="input-group-text rounded-end-pill border-0 bg-light"><i class="fas fa-search text-muted"></i></span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" id="childrenTable">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Child Details</th>
+                    <th>Age/Gender</th>
+                    <th>Facility / Orphanage</th>
+                    <th>Registration Status</th>
+                    <th class="pe-4 text-end">Administrative Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child in children %}
+                <tr>
+                    <td class="ps-4 text-muted fw-bold">#{{ child.id }}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="/static/uploads/{{ child.photo }}" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=40&h=40'" 
+                                 class="rounded-circle shadow-sm" style="width: 40px; height: 40px; object-fit: cover;">
+                            <div class="fw-bold">{{ child.name }}</div>
+                        </div>
+                    </td>
+                    <td>{{ child.age }}y / {{ child.gender }}</td>
+                    <td>{{ child.registered_by.organization_name if child.registered_by else 'N/A' }}</td>
+                    <td>
+                        <span class="badge badge-{{ child.status }}">
+                            {{ child.status.replace('_',' ').upper() }}
+                        </span>
+                    </td>
+                    <td class="pe-4 text-end">
+                        {% if child.status == 'legally_free' %}
+                        <form method="POST" action="{{ url_for('admin.verify_child', child_id=child.id) }}" class="d-inline">
+                            <button class="btn btn-sm btn-success rounded-pill px-3">Verify & List for Adoption</button>
+                        </form>
+                        {% else %}
+                        <span class="text-success small fw-bold"><i class="fas fa-circle-check me-1"></i> Processed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('tableSearch').addEventListener('keyup', function() {
+    let filter = this.value.toUpperCase();
+    let rows = document.querySelector("#childrenTable tbody").rows;
+    for (let i = 0; i < rows.length; i++) {
+        let nameCol = rows[i].cells[1].textContent.toUpperCase();
+        let idCol = rows[i].cells[0].textContent.toUpperCase();
+        if (nameCol.indexOf(filter) > -1 || idCol.indexOf(filter) > -1) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}
